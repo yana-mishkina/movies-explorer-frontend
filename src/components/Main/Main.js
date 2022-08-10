@@ -1,6 +1,7 @@
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import NavigationPopup from "../NavigationPopup/NavigationPopup";
+import Footer from "../Footer/Footer";
 
 function Main(props) {
   return (
@@ -13,6 +14,8 @@ function Main(props) {
         <Navigation 
         onBurgerOpen={props.onBurgerOpen} />
       </Header>
+
+      <Footer />
     </>
   );
 }

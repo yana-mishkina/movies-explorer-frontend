@@ -4,3 +4,6 @@
 @import url(./components/Header/Header.css);
 @import url(./components/Navigation/Navigation.css);
 @import url(./components/NavigationPopup/NavigationPopup.css);
+@import url(./components/Footer/Footer.css);
+@import url(./components/AuthForm/AuthForm.css);
+@import url(./components/Register/Register.css);

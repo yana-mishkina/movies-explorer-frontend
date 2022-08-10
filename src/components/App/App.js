@@ -1,5 +1,12 @@
 import React from "react";
-import { Route, Switch, Redirect, useHistory, Link } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  Redirect,
+  useHistory,
+  Link,
+  Routes,
+} from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Register from "../Register/Register";
@@ -17,21 +24,28 @@ function App() {
   }
 
   return (
-    <>
-      {/* <Route path="/signup">
-        <Register />
-      </Route>
+    <div className="App">
+      <Routes>
+        <Route path="/signup" element={<Register />} />
 
-      <Route path="/signin">
-        <Login />
-      </Route> */}
+        <Route path="/signin" element={<Login />} />
 
-      <Main
-        onBurgerOpen={handeleBurgerOpen}
-        isBurgerOpen={isBurgerOpen}
-        onBurgerClose={closeAllPopups}
-      />
-    </>
+        <Route
+          path="/"
+          element={
+            <Main
+              onBurgerOpen={handeleBurgerOpen}
+              isBurgerOpen={isBurgerOpen}
+              onBurgerClose={closeAllPopups}
+            />
+          }
+        />
+
+        {/* <Route>
+             {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            </Route> */}
+      </Routes>
+    </div>
   );
 }
 
