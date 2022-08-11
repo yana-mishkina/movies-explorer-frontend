@@ -11,6 +11,7 @@ import "./App.css";
 import Main from "../Main/Main";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import Profile from "../Profile/Profile";
 
 function App() {
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(true);
@@ -29,6 +30,17 @@ function App() {
         <Route path="/signup" element={<Register />} />
 
         <Route path="/signin" element={<Login />} />
+
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              onBurgerOpen={handeleBurgerOpen}
+              isBurgerOpen={isBurgerOpen}
+              onBurgerClose={closeAllPopups}
+            />
+          }
+        />
 
         <Route
           path="/"

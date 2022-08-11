@@ -1,7 +1,9 @@
+import React from "react";
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import NavigationPopup from "../NavigationPopup/NavigationPopup";
 import Footer from "../Footer/Footer";
+import Movies from "../Movies/Movies";
 
 function Main(props) {
   return (
@@ -14,6 +16,8 @@ function Main(props) {
         <Navigation 
         onBurgerOpen={props.onBurgerOpen} />
       </Header>
+
+      <Movies />
 
       <Footer />
     </>

@@ -1,0 +1,33 @@
+.filter {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1280px;
+}
+
+.filter__name {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 33px 70px 48px;
+  max-width: 1140px;
+}
+
+@media screen and (max-width: 1140px) {
+  .filter__name {
+    padding: 33px 70px 48px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .filter__name {
+    padding: 33px 30px 48px;
+    text-align: left;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .filter__name {
+    text-align: center;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,22 @@
+.movies-card {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: calc(100% - 22px - 30px) calc(22px + 30px);
+  grid-template-rows: 1fr 79px;
+  position: relative;
+}
+
+.movies-card__link {
+  grid-column: 1/3;
+}
+
+.movies-card__photo {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  object-fit: cover;
+  height: 201px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}

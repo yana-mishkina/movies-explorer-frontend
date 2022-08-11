@@ -44,6 +44,21 @@
   color: black;
 }
 
+@media screen and (max-width: 768px) {
+
+  .auth__logo {
+    padding: 232px 0 40px;
+  }
+
+  .auth__header {
+    padding: 0 0 40px;
+  }
+
+  .auth__link-container {
+    bottom: 232px;
+  }
+} 
+
 @media screen and (max-width: 520px) {
   .auth {
     width: 260px;
