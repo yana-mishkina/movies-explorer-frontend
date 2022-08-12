@@ -1,25 +1,36 @@
 import IconBurger from "../../images/icon__burger.svg";
+import { Link } from "react-router-dom";
 
 function Navigation(props) {
   return (
     <nav className="navigation">
       <ul className="navigation__links">
-        <li className="navigation__link navigation__link_font_medium">
-          <button className="button navigation__button">Фильмы</button>
-        </li>
-        <li className="navigation__link navigation__link_font_regular">
-          <button className="button navigation__button">
-            Сохраненные фильмы
-          </button>
-        </li>
-        <li className="navigation__link navigation__link_font_medium">
-          <button className="button navigation__button">
-            <p className="button__text navigation__button-text">Аккаунт</p>
-            <div className="button__icon navigation__button-icon"></div>
-          </button>
-        </li>
+        <Link
+          to="/movies"
+          className="navigation__link navigation__link_font_medium"
+        >
+          Фильмы
+        </Link>
+
+        <Link
+          to="/saved-movies"
+          className="navigation__link navigation__link_font_regular"
+        >
+          Сохраненные фильмы
+        </Link>
+
+        <Link
+          to="/profile"
+          className="navigation__link navigation__link_font_medium"
+        >
+          <p className="navigation__text">Аккаунт</p>
+          <div className="navigation__icon"></div>
+        </Link>
       </ul>
-      <button className="button navigation__button-burger" onClick={props.onBurgerOpen}>
+      <button
+        className="button navigation__button-burger"
+        onClick={props.onBurgerOpen}
+      >
         <img
           className="navigation__icon-burger"
           src={IconBurger}

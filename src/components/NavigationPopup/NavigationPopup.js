@@ -1,4 +1,5 @@
 import IconCloseBurger from "../../images/icon__close_burger.svg";
+import { Link } from "react-router-dom";
 
 function NavigationPopup(props) {
   return (
@@ -14,29 +15,21 @@ function NavigationPopup(props) {
         </button>
         <nav className="navigation-popup">
           <ul className="navigation-popup__links">
-            <li className="navigation-popup__link">
-              <button className="button navigation-popup__button">
+            <Link className="navigation-popup__link" to="/" onClick={props.onBurgerClose}>
                 Главная
-              </button>
-            </li>
-            <li className="navigation-popup__link">
-              <button className="button navigation-popup__button">
+            </Link>
+            <Link className="navigation-popup__link" to="/movies" onClick={props.onBurgerClose}>
                 Фильмы
-              </button>
-            </li>
-            <li className="navigation-popup__link">
-              <button className="button navigation-popup__button">
+            </Link>
+            <Link className="navigation-popup__link" to="/saved-movies" onClick={props.onBurgerClose}>
                 Сохраненные фильмы
-              </button>
-            </li>
-            <li className="navigation-popup__link">
-              <button className="button navigation-popup__button">
-                <p className="button__text navigation-popup__button-text">
+            </Link>
+            <Link className="navigation-popup__link" to="/profile" onClick={props.onBurgerClose}>
+                <p className="navigation-popup__text">
                   Аккаунт
                 </p>
-                <div className="button__icon navigation-popup__button-icon"></div>
-              </button>
-            </li>
+                <div className="navigation-popup__icon"></div>
+            </Link>
           </ul>
         </nav>
       </div>

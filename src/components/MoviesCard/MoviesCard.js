@@ -1,6 +1,6 @@
 import React from "react";
 
-function MoviesCard() {
+function MoviesCard(props) {
   return (
     <div className="movies-card">
       <a
@@ -15,7 +15,7 @@ function MoviesCard() {
       </a>
       <h2 className="movies-card__name">test name</h2>
       <p className="movies-card__length">1h 17m</p>
-      <button className="button movies-card__button">Сохранить</button>
+      {props.children}
     </div>
   );
 }
