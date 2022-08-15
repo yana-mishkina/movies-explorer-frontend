@@ -1,0 +1,159 @@
+.about-me {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1140px;
+}
+
+.about-me__container {
+  padding: 66px 0 100px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.about-me__info {
+  margin: 0;
+  padding: 0;
+  max-width: 600px;
+}
+
+.about-me__text {
+  margin: 0;
+  padding: 0;
+}
+
+.about-me__text:first-of-type {
+  margin-bottom: 18px;
+}
+
+.about-me__text:last-of-type {
+  margin: 26px 0 99px;
+}
+
+.about-me__text_font_large {
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+}
+
+.about-me__text_font_big {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.about-me__text_font_small {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.about-me__link {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.about-me__photo {
+  width: 270px;
+  height: 327px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 0 0 0 49px;
+  padding: 0;
+}
+
+@media screen and (max-width: 1280px) {
+  .about-me {
+    margin: 0 70px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-me {
+    margin: 0 50px;
+  }
+
+  .about-me__container {
+    padding-bottom: 90px;
+  }
+
+  .about-me__info {
+    max-width: 364px;
+  }
+
+  .about-me__text:first-of-type {
+    margin-bottom: 16px;
+  }
+  
+  .about-me__text:last-of-type {
+    margin: 20px 0 87px;
+  }
+
+  .about-me__text_font_large {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  
+  .about-me__text_font_big {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .about-me__text_font_small {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .about-me__photo {
+    width: 255px;
+    height: 307px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .about-me {
+    margin: 0 14px;
+  }
+
+  .about-me__container {
+    padding-bottom: 70px;
+    flex-direction: column-reverse;
+  }
+
+  .about-me__info {
+    max-width: 100%;
+  }
+
+  .about-me__text:first-of-type {
+    margin: 40px 0 20px;
+  }
+  
+  .about-me__text:last-of-type {
+    margin: 20px 0 40px;
+  }
+
+  .about-me__text_font_large {
+    font-size: 30px;
+    line-height: 36px;
+  }
+  
+  .about-me__text_font_big {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  
+  .about-me__text_font_small {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-me__photo {
+    width: 100%;
+    height: 352px;
+    margin: 0;
+  }
+}
