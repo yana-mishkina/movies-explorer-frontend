@@ -12,7 +12,9 @@ function Register() {
 
   return (
     <div className="auth">
-      <img className="auth__logo" alt="Логотип проекта" src={logo} />
+      <Link className="button auth__button" to="/">
+        <img className="auth__logo" alt="Логотип проекта" src={logo} />
+      </Link>
       <h2 className="auth__header">Добро пожаловать!</h2>
       <AuthForm textButton="Зарегистрироваться">
         <h3 className="auth-form__input-name">Имя</h3>
@@ -24,7 +26,7 @@ function Register() {
           onChange={handleNameChange}
         />
       </AuthForm>
-      <Link to='/signin' className="auth__link-container">
+      <Link to='/signin' className="button auth__button-back">
         <p className="auth__link auth__link_color_grey">
           Уже зарегистрированы? 
         </p>

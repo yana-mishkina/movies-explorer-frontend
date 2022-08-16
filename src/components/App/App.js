@@ -14,6 +14,7 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
 
 function App() {
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(true);
@@ -67,6 +68,8 @@ function App() {
             />
           }
         />
+
+        <Route path="*" element={<NotFoundPage />} />
 
         {/* <Route>
              {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}

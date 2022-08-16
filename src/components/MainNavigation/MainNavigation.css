@@ -1,4 +1,4 @@
-.navigation__button {
+.navigation__button-sign-in {
   border: none;
   color: white;
   background-color: black;
@@ -24,7 +24,7 @@
     font-size: 10px;
   }
 
-  .navigation__button {
+  .navigation__button-sign-in {
     width: 54px;
     height: 26px;
     margin: 0;

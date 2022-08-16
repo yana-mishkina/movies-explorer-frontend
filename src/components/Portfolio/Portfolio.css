@@ -13,7 +13,7 @@
   padding: 0 0 30px;
 }
 
-.portfolio__link {
+.portfolio__button {
   display: flex;
   justify-content: space-between;
   margin: 0;

@@ -15,16 +15,16 @@ function NavigationPopup(props) {
         </button>
         <nav className="navigation-popup">
           <ul className="navigation-popup__links">
-            <Link className="navigation-popup__link" to="/" onClick={props.onBurgerClose}>
+            <Link className="button navigation-popup__button" to="/" onClick={props.onBurgerClose}>
                 Главная
             </Link>
-            <Link className="navigation-popup__link" to="/movies" onClick={props.onBurgerClose}>
+            <Link className="button navigation-popup__button" to="/movies" onClick={props.onBurgerClose}>
                 Фильмы
             </Link>
-            <Link className="navigation-popup__link" to="/saved-movies" onClick={props.onBurgerClose}>
+            <Link className="button navigation-popup__button" to="/saved-movies" onClick={props.onBurgerClose}>
                 Сохраненные фильмы
             </Link>
-            <Link className="navigation-popup__link" to="/profile" onClick={props.onBurgerClose}>
+            <Link className="button navigation-popup__button" to="/profile" onClick={props.onBurgerClose}>
                 <p className="navigation-popup__text">
                   Аккаунт
                 </p>

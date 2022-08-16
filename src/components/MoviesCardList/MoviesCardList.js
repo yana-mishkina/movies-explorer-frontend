@@ -1,14 +1,28 @@
 import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import Preloader from "../Preloader/Preloader";
+import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
 
 function MoviesCardList(props) {
+  const [isLoading, setIsLoading] = React.useState(false);
+
   return (
-    <section className="movies-card-list">
-      <MoviesCard>{props.children}</MoviesCard>
-      <MoviesCard>{props.children}</MoviesCard>
-      <MoviesCard>{props.children}</MoviesCard>
-      <MoviesCard>{props.children}</MoviesCard>
-    </section>
+    <>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <>
+          <section className="movies-card-list">
+            <MoviesCard isSaved={props.isSaved} />
+            <MoviesCard isSaved={props.isSaved} />
+            <MoviesCard isSaved={props.isSaved} />
+            <MoviesCard isSaved={props.isSaved} />
+          </section>
+          
+          <ShowMoreButton />
+        </>
+      )}
+    </>
   );
 }
 

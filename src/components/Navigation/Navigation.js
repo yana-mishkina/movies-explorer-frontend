@@ -7,21 +7,21 @@ function Navigation(props) {
       <ul className="navigation__links">
         <Link
           to="/movies"
-          className="navigation__link navigation__link_font_medium"
+          className="button navigation__button navigation__button_font_medium"
         >
           Фильмы
         </Link>
 
         <Link
           to="/saved-movies"
-          className="navigation__link navigation__link_font_regular"
+          className="button navigation__button navigation__button_font_regular"
         >
           Сохраненные фильмы
         </Link>
 
         <Link
           to="/profile"
-          className="navigation__link navigation__link_font_medium"
+          className="navigation__button navigation__button_font_medium"
         >
           <p className="navigation__text">Аккаунт</p>
           <div className="navigation__icon"></div>

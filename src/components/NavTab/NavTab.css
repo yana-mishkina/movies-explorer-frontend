@@ -30,7 +30,7 @@
   margin: 0;
 }
 
-.navigation-tab__link {
+.navigation-tab__button {
   text-decoration: none;
   color: white;
   margin: 0;
@@ -50,7 +50,7 @@
     height: 26px;
   }
 
-  .navigation-tab__link {
+  .navigation-tab__button {
     font-size: 10px;
   }
 }

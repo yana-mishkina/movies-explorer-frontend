@@ -6,16 +6,16 @@ function MainNavigation() {
       <ul className="navigation__main-links">
         <Link
           to="/signup"
-          className="navigation__link navigation__link_font_medium"
+          className="button navigation__button navigation__button_font_medium"
         >
           Регистрация
         </Link>
 
         <Link
           to="/signin"
-          className="navigation__link navigation__link_font_regular"
+          className="button navigation__button navigation__button_font_regular"
         >
-          <button className="button navigation__button" type="button">Войти</button>
+          <button className="button navigation__button-sign-in" type="button">Войти</button>
         </Link>
       </ul>
     </nav>

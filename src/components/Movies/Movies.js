@@ -6,10 +6,9 @@ import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
 import FilterCheckBox from "../FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
-import SaveMovieButton from "../SaveMovieButton/SaveMovieButton";
 
 function Movies(props) {
+  
   return (
     <>
       <NavigationPopup
@@ -25,11 +24,7 @@ function Movies(props) {
 
       <FilterCheckBox />
 
-      <MoviesCardList>
-        <SaveMovieButton />
-      </MoviesCardList>
-
-      <ShowMoreButton />
+      <MoviesCardList isSaved={false} />
 
       <Footer />
     </>

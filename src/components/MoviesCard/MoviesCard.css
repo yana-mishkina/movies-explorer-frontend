@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-.movies-card__link {
+.movies-card__button {
   grid-column: 1/3;
 }
 

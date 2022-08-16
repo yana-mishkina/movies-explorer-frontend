@@ -13,8 +13,28 @@
   right: 14px;
 }
 
+.saved-movie-button {
+  border: none;
+  background: transparent;
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  top: 14px;
+  right: 14px;
+}
+
+.saved-movie-icon {
+  margin: 0;
+  padding: 0;
+}
+
 @media screen and (max-width: 520px) {
   .save-movie-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .saved-movie-button {
     top: 10px;
     right: 10px;
   }

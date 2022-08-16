@@ -5,8 +5,8 @@ function Footer() {
       <div className="footer__project-info">
         <p className="footer__copyright">&copy; 2022</p>
         <ul className="footer__links">
-          <li className="footer__link-item"><a className="footer__link" href="https://practicum.yandex.ru/web/">Яндекс.Практикум</a></li>
-          <li className="footer__link-item"><a className="footer__link" href="https://github.com/yana-mishkina">Github</a></li>
+          <li className="footer__link-item"><a className="button footer__button" href="https://practicum.yandex.ru/web/">Яндекс.Практикум</a></li>
+          <li className="footer__link-item"><a className="button footer__button" href="https://github.com/yana-mishkina">Github</a></li>
         </ul>
       </div>
     </footer>

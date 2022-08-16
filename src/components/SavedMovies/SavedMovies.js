@@ -6,7 +6,6 @@ import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
 import FilterCheckBox from "../FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import DeleteMovieButton from "../DeleteMovieButton/DeleteMovieButton";
 
 function SavedMovies(props) {
   return (
@@ -24,11 +23,7 @@ function SavedMovies(props) {
 
     <FilterCheckBox />
 
-    <MoviesCardList>
-      <DeleteMovieButton />
-    </MoviesCardList>
-
-    <div className="saved-movies-space"></div>
+    <MoviesCardList isSaved={true} />
 
     <Footer />
   </>
