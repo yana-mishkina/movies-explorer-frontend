@@ -9,7 +9,6 @@ function FilterCheckBox(props) {
           type="checkbox"
           id="filter-shortfilm"
           name="shortfilm"
-          required="false"
         />
         <span className="checkbox__slider" />
         Короткометражки

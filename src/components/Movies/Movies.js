@@ -20,11 +20,11 @@ function Movies(props) {
         <Navigation onBurgerOpen={props.onBurgerOpen} />
       </Header>
 
-      <SearchForm />
+      <SearchForm onSubmit={props.onSubmit} />
 
       <FilterCheckBox />
 
-      <MoviesCardList isSaved={false} />
+      <MoviesCardList isSaved={false} movies={props.movies} isLoadingData={props.isLoading} />
 
       <Footer />
     </>

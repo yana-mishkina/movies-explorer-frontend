@@ -2,23 +2,25 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
 import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
+import NotFoundMovies from "../NotFoundMovies/NotFoundMovies";
 
 function MoviesCardList(props) {
-  const [isLoading, setIsLoading] = React.useState(false);
 
   return (
     <>
-      {isLoading ? (
+      {props.isLoading ? (
         <Preloader />
       ) : (
         <>
           <section className="movies-card-list">
-            <MoviesCard isSaved={props.isSaved} />
-            <MoviesCard isSaved={props.isSaved} />
-            <MoviesCard isSaved={props.isSaved} />
-            <MoviesCard isSaved={props.isSaved} />
+            {props.movies ? 
+              props.movies.map((movie) => (
+              <MoviesCard key={movie.id} name={movie.nameRU} trailer={movie.trailerLink} image={movie.image} duration={movie.duration} />
+            )) : <NotFoundMovies />
+          }
+              
           </section>
-          
+
           <ShowMoreButton />
         </>
       )}

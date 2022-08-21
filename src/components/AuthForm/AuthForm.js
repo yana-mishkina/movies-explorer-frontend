@@ -1,38 +1,27 @@
 import React from "react";
 
 function AuthForm(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
-
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
-  }
-
   return (
-    <form className="auth-form">
+    <form className="auth-form" onSubmit={props.onSubmit}>
       {props.children}
       <h3 className="auth-form__input-name">E-mail</h3>
       <input
         className="auth-form__input"
         required
         type="email"
-        value={email}
-        onChange={handleEmailChange}
+        value={props.email}
+        onChange={props.onChangeEmail}
       />
       <h3 className="auth-form__input-name">Пароль</h3>
       <input
         className="auth-form__input"
         required
         type="password"
-        value={password}
-        onChange={handlePasswordChange}
+        value={props.password}
+        onChange={props.onChangePassword}
       />
       <button className="button auth-form__button" type="submit">
-        {props.textButton}
+        {props.isLoadingData ? props.textLoading : props.textButton}
       </button>
     </form>
   );
