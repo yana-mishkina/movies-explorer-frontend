@@ -1,8 +1,8 @@
 import React from "react";
 
-function ShowMoreButton() {
+function ShowMoreButton(props) {
   return( 
-      <button className="button show-more-button" type="button">Еще</button>
+      <button className="button show-more-button" type="button" onClick={props.onClick}>Еще</button>
   );
 }
 

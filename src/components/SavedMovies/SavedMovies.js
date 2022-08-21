@@ -23,7 +23,7 @@ function SavedMovies(props) {
 
     <FilterCheckBox />
 
-    <MoviesCardList isSaved={true} />
+    <div className="movies-card"></div>
 
     <Footer />
   </>

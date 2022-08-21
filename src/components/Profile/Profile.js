@@ -6,6 +6,8 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+  
   const [name, setName] = React.useState(null);
   // const [email, setEmail] = React.useState(`${currentUser.email}`);
 

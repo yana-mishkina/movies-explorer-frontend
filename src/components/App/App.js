@@ -6,7 +6,7 @@ import {
   Link,
   Routes,
   useNavigate,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
@@ -33,23 +33,31 @@ function App() {
   const [movies, setMovies] = React.useState([]);
   const navigate = useNavigate();
 
-  // React.useEffect(() => {
-  //   mainApi
-  //     .getUserInfo()
-  //     .then((userData) => {
-  //       console.log('hi', 'hi');
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+  React.useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      mainApi
+        .getToken(token)
+        .then((data) => {
+          setEmail(data.email);
+          setIsLoggedIn(true);
+          // history.push('/');
+        })
+        .catch((err) =>{
+          console.log(err);
+          // history.push('/sign-in');
+        })
+    }
+  }, [navigate]);
 
-  // React.useEffect(() => {
-  //   moviesApi
-  //     .getMovies()
-  //     .then((userData) => {
-  //       console.log(userData);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+  React.useEffect(() => {
+    mainApi
+      .getUserInfo()
+      .then((userData) => {
+        console.log(userData);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   function handeleBurgerOpen() {
     setIsBurgerOpen(false);
@@ -103,27 +111,12 @@ function App() {
       });
   }
 
-  function handleUpdateUser(data) {
-    setIsLoading(true);
-    // mainApi
-    //   .editProfile(data.name, data.email)
-    //   .then((name, email) => {
-    //     setCurrentUser(name, email);
-    //     closeAllPopups();
-    //   })
-    //   .catch((err) => console.log(err))
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
-  }
-
   function handleSearchMovieSubmit() {
     setIsLoading(true);
     moviesApi
       .getMovies()
       .then((movies) => {
-        console.log(movies);
-        localStorage.setItem('movies', JSON.stringify(movies));
+        localStorage.setItem("movies", JSON.stringify(movies));
         setMovies(movies);
       })
       .catch((err) => {
@@ -134,23 +127,42 @@ function App() {
       });
   }
 
+  function handleMovieSave(movie) {
+    mainApi
+      .saveMovie(movie)
+      .then((item) => {
+        const newCard = {
+          key: item._id,
+          id: item.movieId,
+          image: item.image,
+          nameRU: item.nameRU,
+          duration: item.duration,
+          owner: item.owner,
+          trailer: item.trailer,
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-  React.useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      mainApi
-        .getToken(token)
-        .then((data) => {
-          setEmail(data.email);
-          setIsLoggedIn(true);
-          // navigate('/movies');
-        })
-        .catch((err) => {
-          console.log(err);
-          // navigate('/signin');
-        });
-    }
-  }, [navigate]);
+  // React.useEffect(() => {
+  //   const token = localStorage.getItem("jwt");
+  //   if (token) {
+  //     mainApi
+  //       .getToken(token)
+  //       .then((data) => {
+  //         // setEmail(data.email);
+  //         setIsLoggedIn(true);
+  //         mainApi.getUserInfo.then((res) => console.log(res));
+  //         // navigate('/movies');
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         // navigate('/signin');
+  //       });
+  //   }
+  // }, [navigate]);
 
   function handleSignOut() {
     setIsLoggedIn(false);
@@ -186,7 +198,7 @@ function App() {
               <Login onSubmit={handleLoginSubmit} isLoadingData={isLoading} />
             }
           />
-          
+
           <Route
             path="/profile"
             element={
@@ -195,11 +207,10 @@ function App() {
                 isBurgerOpen={isBurgerOpen}
                 onBurgerClose={closeAllPopups}
                 onSignOut={handleSignOut}
-                onSubmit={handleUpdateUser}
+                // onSubmit={handleUpdateUser}
               />
             }
           />
-
 
           <Route
             path="/movies"
@@ -209,8 +220,9 @@ function App() {
                 isBurgerOpen={isBurgerOpen}
                 onBurgerClose={closeAllPopups}
                 onSubmit={handleSearchMovieSubmit}
-                movies={movies} 
+                movies={movies}
                 isLoadingData={isLoading}
+                onMovieSave={handleMovieSave}
               />
             }
           />

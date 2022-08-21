@@ -6,7 +6,6 @@ import DeleteMovieButton from "../DeleteMovieButton/DeleteMovieButton";
 function MoviesCard(props) {
 
   const location = useLocation();
-  const [isLiked, setIsLiked] = React.useState(true);
 
   function tansformDuration(min) {
     const hours = Math.trunc(min / 60);
@@ -16,6 +15,10 @@ function MoviesCard(props) {
         } else {
             return `${hours}ч ${minutes}м`;
         }
+  }
+
+  function handleSaveClick() {
+    props.onMovieSave(props.card);
   }
 
   return (
@@ -33,10 +36,10 @@ function MoviesCard(props) {
       </a>
       <h2 className="movies-card__name">{props.name}</h2>
       <p className="movies-card__length">{tansformDuration(props.duration)}</p>
-      {props.isSaved ? (
+      {props.isOnSavedMovies ? (
         <DeleteMovieButton />
       ) : (
-        <SaveMovieButton isLiked={isLiked} />
+        <SaveMovieButton isSaved={props.isSaved} onClick={handleSaveClick} />
       )}
     </div>
   );

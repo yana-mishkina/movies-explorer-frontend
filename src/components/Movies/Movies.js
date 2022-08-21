@@ -8,7 +8,6 @@ import FilterCheckBox from "../FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
 function Movies(props) {
-  
   return (
     <>
       <NavigationPopup
@@ -24,7 +23,12 @@ function Movies(props) {
 
       <FilterCheckBox />
 
-      <MoviesCardList isSaved={false} movies={props.movies} isLoadingData={props.isLoading} />
+      <MoviesCardList
+        isSaved={false}
+        movies={props.movies}
+        isLoadingData={props.isLoading}
+        onMovieSave={props.onMovieSave}
+      />
 
       <Footer />
     </>
