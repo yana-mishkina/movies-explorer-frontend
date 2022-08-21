@@ -18,6 +18,7 @@ import Profile from "../Profile/Profile";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import { mainApi } from "../../utils/MainApi";
 import { moviesApi } from "../../utils/MoviesApi";
+import { auth } from "../../utils/Auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -27,37 +28,12 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSuccessAction, setIsSuccessAction] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [email, setEmail] = React.useState(null);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [movies, setMovies] = React.useState([]);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      mainApi
-        .getToken(token)
-        .then((data) => {
-          setEmail(data.email);
-          setIsLoggedIn(true);
-          // history.push('/');
-        })
-        .catch((err) =>{
-          console.log(err);
-          // history.push('/sign-in');
-        })
-    }
-  }, [navigate]);
-
-  React.useEffect(() => {
-    mainApi
-      .getUserInfo()
-      .then((userData) => {
-        console.log(userData);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const user = JSON.parse(localStorage.getItem("user-name"));
 
   function handeleBurgerOpen() {
     setIsBurgerOpen(false);
@@ -74,7 +50,7 @@ function App() {
 
   function handleRegisterSubmit(data) {
     setIsLoading(true);
-    mainApi
+    auth
       .register(data.name, data.email, data.password)
       .then(() => {
         setIsSuccessAction(true);
@@ -93,12 +69,13 @@ function App() {
 
   function handleLoginSubmit(data) {
     setIsLoading(true);
-    mainApi
+    auth
       .login(data.email, data.password)
       .then((data) => {
-        localStorage.setItem("jwt", data.token);
-        setEmail(email);
         setIsLoggedIn(true);
+        setCurrentUser(data);
+        console.log(data)
+        localStorage.setItem("jwt", data.token);
         navigate("/movies");
       })
       .catch((err) => {
@@ -109,7 +86,25 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
-  }
+  };
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      auth
+        .getToken(token)
+        .then((data) => {
+          setCurrentUser(data);
+          setIsLoggedIn(true);
+          console.log(data)
+          navigate('/movies');
+        })
+        .catch((err) =>{
+          console.log(err);
+          navigate('/signin');
+        })
+    }
+  }, [isLoggedIn, user]);
 
   function handleSearchMovieSubmit() {
     setIsLoading(true);
@@ -145,24 +140,6 @@ function App() {
         console.log(err);
       });
   }
-
-  // React.useEffect(() => {
-  //   const token = localStorage.getItem("jwt");
-  //   if (token) {
-  //     mainApi
-  //       .getToken(token)
-  //       .then((data) => {
-  //         // setEmail(data.email);
-  //         setIsLoggedIn(true);
-  //         mainApi.getUserInfo.then((res) => console.log(res));
-  //         // navigate('/movies');
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         // navigate('/signin');
-  //       });
-  //   }
-  // }, [navigate]);
 
   function handleSignOut() {
     setIsLoggedIn(false);

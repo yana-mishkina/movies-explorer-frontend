@@ -13,11 +13,12 @@ class Auth {
     return Promise.reject(res.status);
   }
 
-  register(email, password) {
+  register(name, email, password) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({ 
+        name: name,
         email: email, 
         password: password 
       }),

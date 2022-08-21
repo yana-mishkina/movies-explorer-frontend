@@ -6,28 +6,23 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const [name, setName] = React.useState(`${currentUser.name}`);
   
-  const [name, setName] = React.useState(null);
-  // const [email, setEmail] = React.useState(`${currentUser.email}`);
+ 
+  const [email, setEmail] = React.useState(`${currentUser.email}`);
 
-  // function handleEmailChange(e) {
-  //   setEmail(e.target.value);
-  // }
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
 
-  // function handleNameChange(e) {
-  //   setName(e.target.value);
-  // }
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
     props.onSubmit();
   }
-
-  // React.useEffect(() => {
-  //   setName(currentUser.name);
-  //   setEmail(currentUser.email);
-  // }, [currentUser]);
 
   return (
     <>
@@ -47,7 +42,7 @@ function Profile(props) {
             className="profile__text profile__text_wight_regular"
             type="text"
             value={name}
-            // onChange={handleNameChange}
+            onChange={handleNameChange}
           />
         </div>
         <div className="profile__line">
@@ -55,8 +50,8 @@ function Profile(props) {
           <input
             className="profile__text profile__text_wight_regular"
             type="email"
-            // value={email}
-            // onChange={handleEmailChange}
+            value={email}
+            onChange={handleEmailChange}
           />
         </div>
         <button
