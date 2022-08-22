@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Switch,
-  Redirect,
-  Link,
-  Routes,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -27,6 +19,7 @@ function App() {
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(true);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSuccessAction, setIsSuccessAction] = React.useState(false);
+  const [isRegistration, setIsRegistration] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
@@ -53,6 +46,7 @@ function App() {
     auth
       .register(data.name, data.email, data.password)
       .then(() => {
+        setIsRegistration(true);
         setIsSuccessAction(true);
         handleInfoTooltipOpen();
         navigate("/signin");
@@ -74,7 +68,7 @@ function App() {
       .then((data) => {
         setIsLoggedIn(true);
         setCurrentUser(data);
-        console.log(data)
+        console.log(data);
         localStorage.setItem("jwt", data.token);
         navigate("/movies");
       })
@@ -86,25 +80,44 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }
 
   React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem("jwt");
     if (token) {
       auth
         .getToken(token)
         .then((data) => {
           setCurrentUser(data);
           setIsLoggedIn(true);
-          console.log(data)
-          navigate('/movies');
+          navigate("/movies");
         })
-        .catch((err) =>{
+        .catch((err) => {
           console.log(err);
-          navigate('/signin');
-        })
+          navigate("/signin");
+        });
     }
   }, [isLoggedIn, user]);
+
+  function handleChangeProfile(data) {
+    setIsLoading(true);
+    mainApi
+      .editProfile(data.name, data.email)
+      .then((data) => {
+        setIsRegistration(false);
+        setIsSuccessAction(true);
+        setIsInfoTooltipOpen(true);
+        setCurrentUser(data.name, data.email);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsSuccessAction(false);
+        setIsInfoTooltipOpen(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   function handleSearchMovieSubmit() {
     setIsLoading(true);
@@ -154,10 +167,21 @@ function App() {
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
           isSuccessAction={isSuccessAction}
+          isRegistration={isRegistration}
         />
 
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route
+            path="/"
+            element={
+              <Main
+                isLoggedIn={isLoggedIn}
+                onBurgerOpen={handeleBurgerOpen}
+                isBurgerOpen={isBurgerOpen}
+                onBurgerClose={closeAllPopups}
+              />
+            }
+          />
 
           <Route
             path="/signup"
@@ -179,47 +203,52 @@ function App() {
           <Route
             path="/profile"
             element={
-              <Profile
-                onBurgerOpen={handeleBurgerOpen}
-                isBurgerOpen={isBurgerOpen}
-                onBurgerClose={closeAllPopups}
-                onSignOut={handleSignOut}
-                // onSubmit={handleUpdateUser}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Profile
+                  onBurgerOpen={handeleBurgerOpen}
+                  isBurgerOpen={isBurgerOpen}
+                  onBurgerClose={closeAllPopups}
+                  onSignOut={handleSignOut}
+                  onSubmit={handleChangeProfile}
+                  textButton="Редактировать"
+                  textLoading="Сохраняем..."
+                  isLoadingData={isLoading}
+                />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/movies"
             element={
-              <Movies
-                onBurgerOpen={handeleBurgerOpen}
-                isBurgerOpen={isBurgerOpen}
-                onBurgerClose={closeAllPopups}
-                onSubmit={handleSearchMovieSubmit}
-                movies={movies}
-                isLoadingData={isLoading}
-                onMovieSave={handleMovieSave}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Movies
+                  onBurgerOpen={handeleBurgerOpen}
+                  isBurgerOpen={isBurgerOpen}
+                  onBurgerClose={closeAllPopups}
+                  onSubmit={handleSearchMovieSubmit}
+                  movies={movies}
+                  isLoadingData={isLoading}
+                  onMovieSave={handleMovieSave}
+                />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/saved-movies"
             element={
-              <SavedMovies
-                onBurgerOpen={handeleBurgerOpen}
-                isBurgerOpen={isBurgerOpen}
-                onBurgerClose={closeAllPopups}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <SavedMovies
+                  onBurgerOpen={handeleBurgerOpen}
+                  isBurgerOpen={isBurgerOpen}
+                  onBurgerClose={closeAllPopups}
+                />
+              </ProtectedRoute>
             }
           />
 
           <Route path="*" element={<NotFoundPage />} />
-
-          {/* <Route>
-             {isLoggedIn ? <Navigate to="/movies" /> : <Navigate to="/signin" />}
-            </Route> */}
         </Routes>
       </div>
     </CurrentUserContext.Provider>

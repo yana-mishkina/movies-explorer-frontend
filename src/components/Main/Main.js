@@ -6,12 +6,22 @@ import Techs from "../Techs/Techs";
 import AboutMe from "../AboutMe/AboutMe";
 import Portfolio from "../Portfolio/Portfolio";
 import Footer from "../Footer/Footer";
+import Navigation from "../Navigation/Navigation";
+import NavigationPopup from "../NavigationPopup/NavigationPopup";
 
-function Main() {
+function Main(props) {
   return (
     <>
+      <NavigationPopup
+        isBurgerOpen={props.isBurgerOpen}
+        onBurgerClose={props.onBurgerClose}
+      />
       <Header>
-        <MainNavigation />
+        {props.isLoggedIn ? (
+          <Navigation onBurgerOpen={props.onBurgerOpen} />
+        ) : (
+          <MainNavigation />
+        )}
       </Header>
       <Promo />
       <AboutProject />

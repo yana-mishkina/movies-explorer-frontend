@@ -6,10 +6,13 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = React.useState(`${currentUser.name}`);
-  
- 
-  const [email, setEmail] = React.useState(`${currentUser.email}`);
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+
+  React.useEffect(() => {
+    setName(currentUser.name);
+    setEmail(currentUser.email);
+  }, [currentUser]);
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -21,7 +24,10 @@ function Profile(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onSubmit();
+    props.onSubmit({
+      name: name,
+      email: email,
+    });
   }
 
   return (
@@ -58,7 +64,7 @@ function Profile(props) {
           className="button profile__button profile__button_color_black"
           type="submit"
         >
-          Редактировать
+          {props.isLoadingData ? props.textLoading : props.textButton}
         </button>
         <button
           className="button profile__button profile__button_color_red"
