@@ -45,10 +45,12 @@ function Profile(props) {
         <div className="profile__line">
           <p className="profile__text profile__text_wight_medium">Имя</p>
           <input
-            className="profile__text profile__text_wight_regular"
-            type="text"
-            value={name}
             onChange={handleNameChange}
+            type="text"
+            className="profile__text profile__text_wight_regular"
+            name="name"
+            required
+            value={name}
           />
         </div>
         <div className="profile__line">
@@ -56,6 +58,8 @@ function Profile(props) {
           <input
             className="profile__text profile__text_wight_regular"
             type="email"
+            name="email"
+            required
             value={email}
             onChange={handleEmailChange}
           />

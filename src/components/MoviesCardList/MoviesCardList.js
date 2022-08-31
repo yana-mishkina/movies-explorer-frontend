@@ -2,7 +2,6 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
 import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
-import NotFoundMovies from "../NotFoundMovies/NotFoundMovies";
 
 function MoviesCardList(props) {
   const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
@@ -49,28 +48,38 @@ function MoviesCardList(props) {
         <Preloader />
       ) : (
         <>
-          <section className="movies-card-list">
-            {props.movies ? (
-              movies
-                .map((movie) => (
-                  <MoviesCard
-                    key={movie.id}
-                    name={movie.nameRU}
-                    trailer={movie.trailerLink}
-                    image={movie.image}
-                    duration={movie.duration}
-                    isSaved={props.isSaved}
-                    isOnSavedMovies={false}
-                    onMovieSave={props.onMovieSave}
-                  />
-                ))
-            ) : (
-              <NotFoundMovies />
-            )}
-          </section>
+          {props.isFindMovies ? (
+            <section className="movies-card-list">
+              {movies.map((movie) => (
+                <MoviesCard
+                  key={movie.id}
+                  name={movie.nameRU}
+                  trailer={movie.trailerLink}
+                  image={movie.image}
+                  duration={movie.duration}
+                  isSaved={props.isSaved}
+                  isOnSavedMovies={false}
+                  onMovieSave={props.onMovieSave}
+                />
+              ))}
+            </section>
+          ) : (
+            <>
+              {props.isServerError ? (
+                <p className="not-found-movies">
+                  Во время запроса произошла ошибка. Возможно, проблема с
+                  соединением или сервер недоступен. Подождите немного и
+                  попробуйте ещё раз.
+                </p>
+              ) : (
+                <p className="not-found-movies">Ничего не найдено</p>
+              )}
+            </>
+          )}
 
-          {(props.movies.length === movies.length) ? undefined : <ShowMoreButton onClick={showMoreCards} /> }
-
+          {props.movies.length === movies.length ? undefined : (
+            <ShowMoreButton onClick={showMoreCards} />
+          )}
         </>
       )}
     </>

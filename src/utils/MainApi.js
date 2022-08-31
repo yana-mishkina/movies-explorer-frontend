@@ -11,47 +11,59 @@ class MainApi {
     return Promise.reject(res.status);
   }
 
-  getMovies() {
+  getMovies(token) {
     return fetch(`${this._url}/movies`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
     }).then((res) => this._checkResponse(res));
   }
 
-  saveMovie(movie) {
-    return fetch(`${this._url}/movies`, {
+  saveMovie(data, token) {
+    return fetch(this._baseUrl + "/movies", {
       method: "POST",
-      headers: this.headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
-        image: `https://api.nomoreparties.co${movie.image.url}`,
-        trailer: movie.trailerLink,
-        thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
-        movieId: movie.id,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
+        country: data.country,
+        director: data.director,
+        duration: data.duration,
+        year: data.year,
+        description: data.description,
+        image: data.image,
+        trailerLink: data.trailerLink,
+        thumbnail: data.thumbnail,
+        movieId: data.movieId,
+        nameRU: data.nameRU,
+        nameEN: data.nameEN,
       }),
-    }).then(this._checkResponse);
+    }).then((res) => this._checkResponse(res));
   }
 
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
     }).then(this._checkResponse);
   }
 
-  editProfile(name, email) {
+  editProfile(name, email, token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this.headers,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
-        name,
-        email,
+        name: name,
+        email: email,
       }),
     }).then(this._checkResponse);
   }

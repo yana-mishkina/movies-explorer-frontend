@@ -8,6 +8,7 @@ import FilterCheckBox from "../FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
 function Movies(props) {
+
   return (
     <>
       <NavigationPopup
@@ -19,15 +20,20 @@ function Movies(props) {
         <Navigation onBurgerOpen={props.onBurgerOpen} />
       </Header>
 
-      <SearchForm onSubmit={props.onSubmit} />
+      <SearchForm 
+        onSubmit={props.onSubmit}
+        searchedMovie={props.searchedMovie}
+        />
 
-      <FilterCheckBox />
+      <FilterCheckBox checked={props.isShortMovie} onFilter={props.onFilter} />
 
       <MoviesCardList
         isSaved={false}
         movies={props.movies}
-        isLoadingData={props.isLoading}
+        isLoading={props.isLoading}
         onMovieSave={props.onMovieSave}
+        isFindMovies={props.isFindMovies}
+        isServerError={props.isServerError}
       />
 
       <Footer />

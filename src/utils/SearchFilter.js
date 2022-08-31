@@ -1,20 +1,15 @@
-function SearchFilter(searchQueries, moviesData) {
-  // const { search = "", shortfilm = false } = searchQueries;
+export const SearchFilter = (movies, req) => {
+  return movies.filter((movie) =>
+    movie.nameRU.toLowerCase().includes(req.toLowerCase())
+  );
+};
 
-  // const filterKeyword = (movie) => {
-  //   return JSON.stringify(movie).toLowerCase().includes(search.toLowerCase());
-  // };
-
-  const { shortfilm = false } = searchQueries;
-
-  function filterShortfilm(movie) {
-    return movie.duration <= 40;
-  };
-
-  if (shortfilm) {
-    return moviesData.filter(filterShortfilm);
-
+export const SearchShortFilter = (movies, shortMovies) => {
+  if (shortMovies) {
+    return movies.filter((movie) => movie.duration <= 40);
+  } else {
+    return movies;
   }
-}
+};
 
-export default SearchFilter;
+
