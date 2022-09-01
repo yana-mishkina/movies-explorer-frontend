@@ -63,7 +63,7 @@ function App() {
           navigate("/signin");
         });
     }
-  }, [user]);
+  }, [isLoggedIn, user]);
 
   function handleRegisterSubmit(data) {
     setIsLoading(true);
@@ -106,7 +106,6 @@ function App() {
   }
 
   function handleChangeProfile(name, email) {
-    setIsLoggedIn(true);
     setIsLoading(true);
     mainApi
       .editProfile(name, email)
