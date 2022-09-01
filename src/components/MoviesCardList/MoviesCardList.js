@@ -60,6 +60,7 @@ function MoviesCardList(props) {
                   isSaved={props.isSaved}
                   isOnSavedMovies={false}
                   onMovieSave={props.onMovieSave}
+                  movies={props.movies}
                 />
               ))}
             </section>

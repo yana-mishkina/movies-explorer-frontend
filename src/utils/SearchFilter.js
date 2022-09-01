@@ -4,8 +4,8 @@ export const SearchFilter = (movies, req) => {
   );
 };
 
-export const SearchShortFilter = (movies, shortMovies) => {
-  if (shortMovies) {
+export const SearchShortFilter = (movies, isShortMovies) => {
+  if (isShortMovies) {
     return movies.filter((movie) => movie.duration <= 40);
   } else {
     return movies;

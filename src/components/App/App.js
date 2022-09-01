@@ -63,7 +63,7 @@ function App() {
           navigate("/signin");
         });
     }
-  }, [isLoggedIn, user]);
+  }, [user]);
 
   function handleRegisterSubmit(data) {
     setIsLoading(true);
@@ -106,15 +106,15 @@ function App() {
   }
 
   function handleChangeProfile(name, email) {
+    setIsLoggedIn(true);
     setIsLoading(true);
-    const token = localStorage.getItem("jwt");
     mainApi
-      .editProfile(name, email, token)
-      .then((data) => {
+      .editProfile(name, email)
+      .then((name, email) => {
         setIsRegistration(false);
         setIsSuccessAction(true);
         setIsInfoTooltipOpen(true);
-        setCurrentUser(data);
+        setCurrentUser(name, email);
       })
       .catch((err) => {
         console.log(err);
@@ -132,26 +132,25 @@ function App() {
     } else {
       setIsFindMovies(true);
       setMovies(filterResults);
-      localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
     }
   }
-
-  let filterResults;
-  let filterShortMovies;
 
   function handleMoviesSearch(searchedMovie) {
     setIsLoading(true);
     localStorage.setItem("searched-movie", JSON.stringify(searchedMovie));
+    
 
     if (!localStorage.movies) {
       moviesApi
         .getMovies()
         .then((res) => {
+          setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
           localStorage.setItem("movies", JSON.stringify(res));
-          filterResults = SearchFilter(res, searchedMovie);
-          filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
+          const filterResults = SearchFilter(res, searchedMovie);
+          const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
           setIsLoading(false);
           showSearchResults(filterShortMovies);
+          localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
         })
         .catch((err) => {
           console.log(err);
@@ -162,11 +161,12 @@ function App() {
         });
 
     } else {
-      filterResults = SearchFilter(JSON.parse(localStorage.getItem("movies")), searchedMovie);
-      filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
+      setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
+      const filterResults = SearchFilter(JSON.parse(localStorage.getItem("movies")), searchedMovie);
+      const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
       setIsLoading(false); 
       showSearchResults(filterShortMovies);
-      
+      localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
     }
   }
 
@@ -175,58 +175,32 @@ function App() {
   }
 
   // React.useEffect(() => {
+  //   setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
   //     if (isShortMovie) {
   //       setIsShortMovie(true);
   //       localStorage.setItem("is-short", "true");
-  //       filterResults = SearchFilter(JSON.parse(localStorage.getItem("movies")), searchedMovie);
-  //       filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
+  //       const filterResults = SearchFilter(JSON.parse(localStorage.getItem("filtered-movies")), searchedMovie);
+  //       const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
   //       showSearchResults(filterShortMovies);
   //     } else {
-  //       filterResults = SearchFilter(JSON.parse(localStorage.getItem("movies")), searchedMovie);
-  //       filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
-  //       showSearchResults(JSON.parse(localStorage.getItem("movies")));
+  //       const filterResults = JSON.parse(localStorage.getItem("filtered-movies"));
+  //       setIsFindMovies(true);
+  //       setMovies(filterResults);
   //     }
   // }, [isShortMovie]);
 
 
-  // function getMovies() {
-  //   const token = localStorage.getItem("jwt");
-  //   mainApi
-  //     .getMovies(token)
-  //     .then((res) => {
-  //       console.log(res)
-  //       const items = res.map((item) => {
-  //         return {
-  //             key: item._id,
-  //             id: item.movieId,
-  //             image: item.image,
-  //             nameRU: item.nameRU,
-  //             duration: item.duration,
-  //             owner: item.owner,
-  //             trailer: item.trailer
-  //         };
-  //     });
-  //     setSavedMovies(items);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
 
   function handleMovieSave(movie) {
     const token = localStorage.getItem("jwt");
-    const movies = JSON.parse(localStorage.getItem("movies"));
-    mainApi
-      .saveMovie(movies, token)
-      .then((data) => {
-        const movies = [...savedMovies, data];
-        setSavedMovies((prev) => [...prev, data]);
-        // localStorage.setItem('savedMovies', JSON.stringify(movies))
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      mainApi
+        .saveMovie(movie, token)
+        .then((savedCard) => {
+          console.log("сохранено");
+        })
+        .catch((err) => console.log(err));
   }
+
 
   function handleSignOut() {
     localStorage.clear();
@@ -234,6 +208,7 @@ function App() {
     setCurrentUser({});
     setSearchedMovie([]);
     setIsFindMovies([]);
+    setMovies([]);
     navigate("/signin");
   }
 
@@ -282,6 +257,7 @@ function App() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Profile
+                  isLoggedIn={isLoggedIn}
                   onBurgerOpen={handeleBurgerOpen}
                   isBurgerOpen={isBurgerOpen}
                   onBurgerClose={closeAllPopups}
@@ -311,6 +287,7 @@ function App() {
                   isServerError={isServerError}
                   isShortMovie={isShortMovie}
                   onFilter={handleShortFilter}
+                  onMovieSave={handleMovieSave}
                 />
               </ProtectedRoute>
             }

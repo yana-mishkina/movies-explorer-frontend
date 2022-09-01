@@ -30,6 +30,7 @@
   font-size: 11px;
   line-height: 13px;
   border: none;
+  text-align: right;
 }
 
 .profile__text_wight_medium {
@@ -63,6 +64,24 @@
 .profile__button_color_red {
   bottom: 70px;
   color: rgba(255, 64, 98, 1);
+}
+
+.profile__input-error {
+  display: block;
+  color: #EE3465;
+    min-height: 12px;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    font-size: 8px;
+    line-height: 12px;
+    font-weight: 400;
+    box-sizing: border-box;
+}
+
+.profile__input-error_visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media screen and (max-width: 768px) {

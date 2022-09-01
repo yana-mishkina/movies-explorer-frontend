@@ -54,17 +54,11 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  editProfile(name, email, token) {
-    return fetch(`${this._baseUrl}/users/me`, {
+  editProfile(name, email) {
+    return fetch(`https://diploma.mishkinayana.nomoredomains.xyz/users/me`, {
       method: "PATCH",
-      headers: {
-        ...this.headers,
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-      }),
+      headers: this.headers,
+      body: JSON.stringify({ name, email }),
     }).then(this._checkResponse);
   }
 }
@@ -72,6 +66,7 @@ class MainApi {
 export const mainApi = new MainApi({
   baseUrl: "https://diploma.mishkinayana.nomoredomains.xyz",
   headers: {
+    authorization: `Bearer ${localStorage.getItem("jwt")}`,
     "Content-Type": "application/json",
   },
 });
