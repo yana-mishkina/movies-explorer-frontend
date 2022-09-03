@@ -61,8 +61,7 @@ function MoviesCardList(props) {
                   isSavedMoviesPage={props.isSavedMoviesPage}
                   isOnSavedMovies={false}
                   onMovieSave={props.onMovieSave}
-                  card={movie}
-
+                  movie={movie}
                 />
               ))}
             </section>
@@ -75,7 +74,7 @@ function MoviesCardList(props) {
                   попробуйте ещё раз.
                 </p>
               ) : (
-                <p className="not-found-movies">Ничего не найдено</p>
+                <p className="not-found-movies">{props.isSavedMoviesPage ? "Нет сохраненных фильмов" : "Ничего не найдено"}</p>
               )}
             </>
           )}

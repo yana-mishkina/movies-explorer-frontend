@@ -10,23 +10,29 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 function SavedMovies(props) {
   return (
     <>
-    <NavigationPopup
-      isBurgerOpen={props.isBurgerOpen}
-      onBurgerClose={props.onBurgerClose}
-    />
+      <NavigationPopup
+        isBurgerOpen={props.isBurgerOpen}
+        onBurgerClose={props.onBurgerClose}
+      />
 
-    <Header>
-      <Navigation onBurgerOpen={props.onBurgerOpen} />
-    </Header>
+      <Header>
+        <Navigation onBurgerOpen={props.onBurgerOpen} />
+      </Header>
 
-    <SearchForm />
+      <SearchForm />
 
-    <FilterCheckBox />
+      <FilterCheckBox />
 
-    <div className="movies-card"></div>
+      <MoviesCardList
+        isSavedMoviesPage={true}
+        movies={props.movies}
+        isLoading={false}
+        isFindMovies={props.isFindMovies}
+        isServerError={false}
+      />
 
-    <Footer />
-  </>
+      <Footer />
+    </>
   );
 }
 

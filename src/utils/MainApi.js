@@ -11,107 +11,59 @@ class MainApi {
     return Promise.reject(res.status);
   }
 
-  getMovies() {
-    return fetch(`${this._url}/movies`, {
+  getMovies(token) {
+    return fetch(`${this._baseUrl}/movies`, {
       method: "GET",
-      headers: this.headers,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`
+      },
     }).then((res) => this._checkResponse(res));
   }
 
-  saveMovie(card) {
-    return fetch(this._baseUrl + "/movies", {
+  saveMovie(card, token) {
+    return fetch(`${this._baseUrl}/movies`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify({
         country: card.country || "No data",
-            director: card.director || "No data",
-            duration: card.duration || 0,
-            year: card.year || 0,
-            description: card.description || "No data",
-            image: `https://api.nomoreparties.co/${card.image.url}` || "https://api.nomoreparties.co/",
-            trailer: card.trailerLink || "No data",
-            nameRU: card.nameRU,
-            nameEN: card.nameEN || "No data",
-            thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
-            movieId: card.id
+        director: card.director || "No data",
+        duration: card.duration || 0,
+        year: card.year || 0,
+        description: card.description || "No data",
+        image: `https://api.nomoreparties.co/${card.image.url}`,
+        trailerLink: card.trailerLink || "No data",
+        nameRU: card.nameRU,
+        nameEN: card.nameEN || "No data",
+        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+        movieId: card.id,
       }),
     }).then((res) => this._checkResponse(res));
   }
 
-  createMovie(card) {
-    return fetch(`${this._url}/movies`,{
-        method: 'POST',
-        headers: this._headers,
-        body: JSON.stringify({
-            country: card.country || "No data",
-            director: card.director || "No data",
-            duration: card.duration || 0,
-            year: card.year || 0,
-            description: card.description || "No data",
-            image: `https://api.nomoreparties.co/${card.image.url}` || "No data",
-            trailer: card.trailerLink,
-            nameRU: card.nameRU,
-            nameEN: card.nameEN || "No data",
-            thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
-            movieId: card.id
-          })
- })
- .then((res) => this._checkResponse(res));
-}
-
-  // saveMovie(
-  //   country,
-  //   director,
-  //   duration,
-  //   year,
-  //   description,
-  //   image,
-  //   trailerLink,
-  //   nameRU,
-  //   nameEN,
-  //   thumbnail,
-  //   movieId,
-  //   token
-  // ) {
-  //   return fetch(`${this._baseUrl}/movies`, {
-  //     method: "POST",
-  //     headers: {
-  //       ...this._headers,
-  //       authorization: "Bearer " + token,
-  //     },
-  //     body: JSON.stringify({
-  //       country,
-  //       director,
-  //       duration,
-  //       year,
-  //       description,
-  //       image,
-  //       trailerLink,
-  //       nameRU,
-  //       nameEN,
-  //       thumbnail,
-  //       movieId,
-  //     }),
-  //   }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
-  // }
-
-  editProfile(data) {
-    return fetch(`${this._baseUrl}/users/me`,{
-    method: 'PATCH',
-    headers: this._headers,
-    body: JSON.stringify({
-      name: data.name,
-      email: data.email,
-      })
-  })
-  .then(this._checkResponse);
-   }
+  editProfile(data, token) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+      }),
+    }).then(this._checkResponse);
+  }
+  
 }
 
 export const mainApi = new MainApi({
   baseUrl: "https://diploma.mishkinayana.nomoredomains.xyz",
   headers: {
-    authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    // authorization: `Bearer ${localStorage.getItem("jwt")}`,
     "Content-Type": "application/json",
   },
 });

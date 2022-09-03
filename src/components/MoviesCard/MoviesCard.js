@@ -26,21 +26,8 @@ function MoviesCard(props) {
   // }, [props.savedMovies, props.id]);
 
   function handleSaveClick() {
-      // const movieData = {
-      //   country: props.country,
-      //   director: props.director,
-      //   duration: props.duration,
-      //   year: props.year,
-      //   description: props.description,
-      //   image: props.image.url,
-      //   trailerLink: props.trailerLink,
-      //   nameRU: props.nameRU,
-      //   nameEN: props.nameEN,
-      //   thumbnail: props.image.formats.thumbnail.url,
-      //   movieId: props.id,
-      // };
       setIsSaved(true);
-      props.onMovieSave(props.card);
+      props.onMovieSave(props.movie);
   }
 
 
@@ -67,7 +54,7 @@ function MoviesCard(props) {
       {props.isSavedMoviesPage ? (
         <DeleteMovieButton />
       ) : (
-        <SaveMovieButton isSaved={false} onClick={handleSaveClick} />
+        <SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />
       )}
     </div>
   );

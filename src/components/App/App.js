@@ -104,10 +104,21 @@ function App() {
       });
   }
 
+  function handleSignOut() {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setCurrentUser({});
+    setSearchedMovie([]);
+    setIsFindMovies([]);
+    setMovies([]);
+    navigate("/signin");
+  }
+
   function handleUpdateUser(data) {
     setIsLoading(true);
+    const token = localStorage.getItem("jwt");
     mainApi
-      .editProfile(data)
+      .editProfile(data, token)
       .then((data) => {
         setCurrentUser(data);
         setIsLoading(false);
@@ -198,49 +209,28 @@ function App() {
   // }, [isShortMovie]);
 
   function handleMovieSave(movie) {
+    const token = localStorage.getItem("jwt");
     mainApi
-      .saveMovie(movie)
-      .then((savedCard) => {
-        console.log("сохранено");
+      .saveMovie(movie, token)
+      .then(() => {
+        setSavedMovies([savedMovies, ...savedMovies]);
       })
       .catch((err) => console.log(err));
   }
 
+  React.useEffect(() => {
+    if(isLoggedIn) {
+      const token = localStorage.getItem("jwt");
+      mainApi
+    .getMovies(token)
+    .then((savedMovies) => {
+      console.log(savedMovies);
+      setSavedMovies(savedMovies);
+    })
+    .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn]);
 
-  // const [copySavedMoives, setCopySavedMoives] = React.useState([]);
-  // const url = "https://api.nomoreparties.co";
-
-  // function handleMovieSave(movie) {
-  //   const token = localStorage.getItem("jwt");
-  //   mainApi.saveMovie(
-  //     movie.country,
-  //     movie.director,
-  //     movie.duration,
-  //     movie.year,
-  //     movie.description,
-  //     url + movie.image.url,
-  //     movie.trailerLink,
-  //     movie.nameRU,
-  //     movie.nameEN,
-  //     url + movie.image.url,
-  //     movie.id,
-  //     token
-  //   )
-  //     .then((newMovie) => {
-  //       setCopySavedMoives([newMovie, ...copySavedMoives]);
-  //     })
-  //     .catch((err) => console.log(`Ошибка удаления фильма: ${err}`));
-  // }
-
-  function handleSignOut() {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    setCurrentUser({});
-    setSearchedMovie([]);
-    setIsFindMovies([]);
-    setMovies([]);
-    navigate("/signin");
-  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -332,6 +322,8 @@ function App() {
                   onBurgerOpen={handeleBurgerOpen}
                   isBurgerOpen={isBurgerOpen}
                   onBurgerClose={closeAllPopups}
+                  movies={savedMovies}
+                  isFindMovies={isFindMovies}
                 />
               </ProtectedRoute>
             }
