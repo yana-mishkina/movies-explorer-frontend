@@ -111,3 +111,28 @@
     bottom: 40px;
   }
 }
+
+
+
+
+.profile__info-message {
+  font-size: 10px;
+  margin-top:16px;
+  font-weight: 400;
+  line-height: 13px;
+  color: #FF4062;
+  display: none;
+  max-width: 410px;
+  text-align: left;
+}
+.profile__info-message_active {
+  display: flex;
+}
+.profile__info-message_active-success {
+  display: flex;
+  color: #2BE080;
+}
+
+.profile__button_disabled {
+  opacity: 0.5;
+}

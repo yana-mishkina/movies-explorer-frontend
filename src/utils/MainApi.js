@@ -11,56 +11,101 @@ class MainApi {
     return Promise.reject(res.status);
   }
 
-  getMovies(token) {
+  getMovies() {
     return fetch(`${this._url}/movies`, {
       method: "GET",
-      headers: {
-        ...this.headers,
-        Authorization: `Bearer ${token}`,
-      },
+      headers: this.headers,
     }).then((res) => this._checkResponse(res));
   }
 
-  saveMovie(data, token) {
+  saveMovie(card) {
     return fetch(this._baseUrl + "/movies", {
       method: "POST",
-      headers: {
-        ...this.headers,
-        Authorization: `Bearer ${token}`,
-      },
+      headers: this._headers,
       body: JSON.stringify({
-        country: data.country,
-        director: data.director,
-        duration: data.duration,
-        year: data.year,
-        description: data.description,
-        image: data.image,
-        trailerLink: data.trailerLink,
-        thumbnail: data.thumbnail,
-        movieId: data.movieId,
-        nameRU: data.nameRU,
-        nameEN: data.nameEN,
+        country: card.country || "No data",
+            director: card.director || "No data",
+            duration: card.duration || 0,
+            year: card.year || 0,
+            description: card.description || "No data",
+            image: `https://api.nomoreparties.co/${card.image.url}` || "https://api.nomoreparties.co/",
+            trailer: card.trailerLink || "No data",
+            nameRU: card.nameRU,
+            nameEN: card.nameEN || "No data",
+            thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+            movieId: card.id
       }),
     }).then((res) => this._checkResponse(res));
   }
 
-  getUserInfo(token) {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: "GET",
-      headers: {
-        ...this.headers,
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(this._checkResponse);
-  }
+  createMovie(card) {
+    return fetch(`${this._url}/movies`,{
+        method: 'POST',
+        headers: this._headers,
+        body: JSON.stringify({
+            country: card.country || "No data",
+            director: card.director || "No data",
+            duration: card.duration || 0,
+            year: card.year || 0,
+            description: card.description || "No data",
+            image: `https://api.nomoreparties.co/${card.image.url}` || "No data",
+            trailer: card.trailerLink,
+            nameRU: card.nameRU,
+            nameEN: card.nameEN || "No data",
+            thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+            movieId: card.id
+          })
+ })
+ .then((res) => this._checkResponse(res));
+}
 
-  editProfile(name, email) {
-    return fetch(`https://diploma.mishkinayana.nomoredomains.xyz/users/me`, {
-      method: "PATCH",
-      headers: this.headers,
-      body: JSON.stringify({ name, email }),
-    }).then(this._checkResponse);
-  }
+  // saveMovie(
+  //   country,
+  //   director,
+  //   duration,
+  //   year,
+  //   description,
+  //   image,
+  //   trailerLink,
+  //   nameRU,
+  //   nameEN,
+  //   thumbnail,
+  //   movieId,
+  //   token
+  // ) {
+  //   return fetch(`${this._baseUrl}/movies`, {
+  //     method: "POST",
+  //     headers: {
+  //       ...this._headers,
+  //       authorization: "Bearer " + token,
+  //     },
+  //     body: JSON.stringify({
+  //       country,
+  //       director,
+  //       duration,
+  //       year,
+  //       description,
+  //       image,
+  //       trailerLink,
+  //       nameRU,
+  //       nameEN,
+  //       thumbnail,
+  //       movieId,
+  //     }),
+  //   }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
+  // }
+
+  editProfile(data) {
+    return fetch(`${this._baseUrl}/users/me`,{
+    method: 'PATCH',
+    headers: this._headers,
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+      })
+  })
+  .then(this._checkResponse);
+   }
 }
 
 export const mainApi = new MainApi({

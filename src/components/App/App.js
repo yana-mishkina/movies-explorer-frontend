@@ -39,10 +39,6 @@ function App() {
     setIsBurgerOpen(false);
   }
 
-  function handleInfoTooltipOpen() {
-    setIsInfoTooltipOpen(true);
-  }
-
   function closeAllPopups() {
     setIsBurgerOpen(true);
     setIsInfoTooltipOpen(false);
@@ -72,13 +68,15 @@ function App() {
       .then(() => {
         setIsRegistration(true);
         setIsSuccessAction(true);
-        handleInfoTooltipOpen();
+        setIsInfoTooltipOpen(true);
+        setTimeout(() => closeAllPopups(), 1000);
         navigate("/signin");
       })
       .catch((err) => {
         console.log(err);
         setIsSuccessAction(false);
-        handleInfoTooltipOpen();
+        setIsInfoTooltipOpen(true);
+        setTimeout(() => closeAllPopups(), 1000);
       })
       .finally((err) => {
         setIsLoading(false);
@@ -99,26 +97,31 @@ function App() {
         console.log(err);
         setIsSuccessAction(false);
         setIsInfoTooltipOpen(true);
+        setTimeout(() => closeAllPopups(), 1000);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }
 
-  function handleChangeProfile(name, email) {
+  function handleUpdateUser(data) {
     setIsLoading(true);
     mainApi
-      .editProfile(name, email)
-      .then((name, email) => {
-        setIsRegistration(false);
+      .editProfile(data)
+      .then((data) => {
+        setCurrentUser(data);
+        setIsLoading(false);
         setIsSuccessAction(true);
         setIsInfoTooltipOpen(true);
-        setCurrentUser(name, email);
+        setTimeout(() => closeAllPopups(), 1000);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
         setIsSuccessAction(false);
         setIsInfoTooltipOpen(true);
+        setTimeout(() => closeAllPopups(), 1000);
+        console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -137,7 +140,6 @@ function App() {
   function handleMoviesSearch(searchedMovie) {
     setIsLoading(true);
     localStorage.setItem("searched-movie", JSON.stringify(searchedMovie));
-    
 
     if (!localStorage.movies) {
       moviesApi
@@ -146,10 +148,16 @@ function App() {
           setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
           localStorage.setItem("movies", JSON.stringify(res));
           const filterResults = SearchFilter(res, searchedMovie);
-          const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
+          const filterShortMovies = SearchShortFilter(
+            filterResults,
+            isShortMovie
+          );
           setIsLoading(false);
           showSearchResults(filterShortMovies);
-          localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
+          localStorage.setItem(
+            "filtered-movies",
+            JSON.stringify(filterResults)
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -158,12 +166,14 @@ function App() {
         .finally(() => {
           setIsServerError(false);
         });
-
     } else {
       setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
-      const filterResults = SearchFilter(JSON.parse(localStorage.getItem("movies")), searchedMovie);
+      const filterResults = SearchFilter(
+        JSON.parse(localStorage.getItem("movies")),
+        searchedMovie
+      );
       const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
-      setIsLoading(false); 
+      setIsLoading(false);
       showSearchResults(filterShortMovies);
       localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
     }
@@ -174,7 +184,6 @@ function App() {
   }
 
   // React.useEffect(() => {
-  //   setSearchedMovie(JSON.parse(localStorage.getItem("searched-movie")));
   //     if (isShortMovie) {
   //       setIsShortMovie(true);
   //       localStorage.setItem("is-short", "true");
@@ -188,18 +197,40 @@ function App() {
   //     }
   // }, [isShortMovie]);
 
-
-
   function handleMovieSave(movie) {
-    const token = localStorage.getItem("jwt");
-      mainApi
-        .saveMovie(movie, token)
-        .then((savedCard) => {
-          console.log("сохранено");
-        })
-        .catch((err) => console.log(err));
+    mainApi
+      .saveMovie(movie)
+      .then((savedCard) => {
+        console.log("сохранено");
+      })
+      .catch((err) => console.log(err));
   }
 
+
+  // const [copySavedMoives, setCopySavedMoives] = React.useState([]);
+  // const url = "https://api.nomoreparties.co";
+
+  // function handleMovieSave(movie) {
+  //   const token = localStorage.getItem("jwt");
+  //   mainApi.saveMovie(
+  //     movie.country,
+  //     movie.director,
+  //     movie.duration,
+  //     movie.year,
+  //     movie.description,
+  //     url + movie.image.url,
+  //     movie.trailerLink,
+  //     movie.nameRU,
+  //     movie.nameEN,
+  //     url + movie.image.url,
+  //     movie.id,
+  //     token
+  //   )
+  //     .then((newMovie) => {
+  //       setCopySavedMoives([newMovie, ...copySavedMoives]);
+  //     })
+  //     .catch((err) => console.log(`Ошибка удаления фильма: ${err}`));
+  // }
 
   function handleSignOut() {
     localStorage.clear();
@@ -256,12 +287,13 @@ function App() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Profile
-                  isLoggedIn={isLoggedIn}
                   onBurgerOpen={handeleBurgerOpen}
                   isBurgerOpen={isBurgerOpen}
                   onBurgerClose={closeAllPopups}
+                  isLoggedIn={isLoggedIn}
+                  onUpdateUser={handleUpdateUser}
+                  isLoading={isLoading}
                   onSignOut={handleSignOut}
-                  onSubmit={handleChangeProfile}
                   textButton="Редактировать"
                   textLoading="Сохраняем..."
                   isLoadingData={isLoading}
@@ -279,7 +311,7 @@ function App() {
                   isBurgerOpen={isBurgerOpen}
                   onBurgerClose={closeAllPopups}
                   movies={movies}
-                  onSubmit={handleMoviesSearch}
+                  onMoviesSearch={handleMoviesSearch}
                   isLoading={isLoading}
                   searchedMovie={searchedMovie}
                   isFindMovies={isFindMovies}

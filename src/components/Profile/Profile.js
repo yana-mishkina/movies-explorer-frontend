@@ -7,31 +7,32 @@ import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  const [isInputsChange, setIsInputChange] = React.useState(false);
+
+  const [isChange, setIsChange] = React.useState(false);
 
   const name = React.useRef("");
   const email = React.useRef("");
   const { values, isValid, handleChange, errors } = useFormWithValidation({
-    user: name.current.value,
+    name: name.current.value,
     email: email.current.value,
   });
 
   React.useEffect(() => {
     name.current.value === currentUser.name &&
     email.current.value === currentUser.email
-      ? setIsInputChange(false)
-      : setIsInputChange(true);
+      ? setIsChange(false)
+      : setIsChange(true);
   }, [values.name, values.email, currentUser.email, currentUser.name]);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (isValid) {
-      props.onSubmit({
+      props.onUpdateUser({
         name: name.current.value,
         email: email.current.value,
       });
     }
-  };
+  }
 
   return (
     <>
@@ -48,13 +49,15 @@ function Profile(props) {
         <div className="profile__line">
           <p className="profile__text profile__text_wight_medium">Имя</p>
           <input
-            onChange={handleChange}
-            type="text"
             className="profile__text profile__text_wight_regular"
             name="name"
-            required
+            maxLength="30"
+            minLength="2"
+            type="text"
             defaultValue={currentUser.name}
+            onChange={(e) => handleChange(e)}
             ref={name}
+            required
           />
         </div>
         <p className="profile__input-error">{errors.name}</p>
@@ -62,21 +65,24 @@ function Profile(props) {
           <p className="profile__text profile__text_wight_medium">Почта</p>
           <input
             className="profile__text profile__text_wight_regular"
-            type="email"
             name="email"
-            required
+            type="email"
+            onChange={(e) => handleChange(e)}
             defaultValue={currentUser.email}
-            onChange={handleChange}
             ref={email}
+            required
           />
         </div>
-        <p className="profile__input-error">{errors.name}</p>
+        <p className="profile__input-error">{errors.email}</p>
+
         <button
-          className="button profile__button profile__button_color_black"
           type="submit"
-          disabled={!isValid || !isInputsChange}
+          disabled={!isValid || !isChange}
+          className={`button profile__button profile__button_color_black ${
+            !isValid && "profile__button_disabled"
+          }`}
         >
-          {props.isLoadingData ? props.textLoading : props.textButton}
+          {props.isLoading ? props.textLoading : props.textButton}
         </button>
         <button
           className="button profile__button profile__button_color_red"

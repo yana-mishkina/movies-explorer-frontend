@@ -21,14 +21,14 @@ function Movies(props) {
       </Header>
 
       <SearchForm 
-        onSubmit={props.onSubmit}
+        onMoviesSearch={props.onMoviesSearch}
         searchedMovie={props.searchedMovie}
         />
 
       <FilterCheckBox checked={props.isShortMovie} onFilter={props.onFilter} />
 
       <MoviesCardList
-        isSaved={false}
+        isSavedMoviesPage={false}
         movies={props.movies}
         isLoading={props.isLoading}
         onMovieSave={props.onMovieSave}

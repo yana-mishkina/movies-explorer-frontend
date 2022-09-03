@@ -58,9 +58,11 @@ function MoviesCardList(props) {
                   image={movie.image}
                   duration={movie.duration}
                   isSaved={props.isSaved}
+                  isSavedMoviesPage={props.isSavedMoviesPage}
                   isOnSavedMovies={false}
                   onMovieSave={props.onMovieSave}
-                  movies={props.movies}
+                  card={movie}
+
                 />
               ))}
             </section>

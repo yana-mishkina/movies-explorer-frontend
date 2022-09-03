@@ -17,7 +17,7 @@ function SearchForm(props) {
     if (!keyword) {
       setIsError(true);
     } else {
-      props.onSubmit(searchedMovie);
+      props.onMoviesSearch(searchedMovie);
     }
   }
 

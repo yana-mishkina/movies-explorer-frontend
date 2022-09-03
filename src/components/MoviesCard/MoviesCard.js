@@ -25,7 +25,7 @@ function MoviesCard(props) {
   //   }
   // }, [props.savedMovies, props.id]);
 
-  function handleSaveClick(card) {
+  function handleSaveClick() {
       // const movieData = {
       //   country: props.country,
       //   director: props.director,
@@ -39,7 +39,8 @@ function MoviesCard(props) {
       //   thumbnail: props.image.formats.thumbnail.url,
       //   movieId: props.id,
       // };
-      props.onMovieSave(card, setIsSaved);
+      setIsSaved(true);
+      props.onMovieSave(props.card);
   }
 
 
@@ -63,10 +64,10 @@ function MoviesCard(props) {
       </a>
       <h2 className="movies-card__name">{props.name}</h2>
       <p className="movies-card__length">{tansformDuration(props.duration)}</p>
-      {props.isOnSavedMovies ? (
+      {props.isSavedMoviesPage ? (
         <DeleteMovieButton />
       ) : (
-        <SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />
+        <SaveMovieButton isSaved={false} onClick={handleSaveClick} />
       )}
     </div>
   );
