@@ -72,7 +72,6 @@ class MainApi {
 export const mainApi = new MainApi({
   baseUrl: "https://diploma.mishkinayana.nomoredomains.xyz",
   headers: {
-    // authorization: `Bearer ${localStorage.getItem("jwt")}`,
     "Content-Type": "application/json",
   },
 });

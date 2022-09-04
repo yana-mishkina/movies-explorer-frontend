@@ -2,10 +2,12 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
 import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
+import { useLocation } from "react-router-dom";
 
 function MoviesCardList(props) {
   const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
   const [cardsNumber, setCardsNumber] = React.useState(showedCardsNumber);
+  const location = useLocation();
   const movies = props.movies.slice(0, cardsNumber);
 
   function showedCardsNumber() {
@@ -53,22 +55,41 @@ function MoviesCardList(props) {
       ) : (
         <>
           {props.isFindMovies ? (
-            <section className="movies-card-list">
-              {movies.map((movie) => (
-                <MoviesCard
-                  key={movie._id || movie.id}
-                  name={movie.nameRU}
-                  trailer={movie.trailerLink}
-                  image={movie.image}
-                  duration={movie.duration}
-                  isSaved={props.isSaved}
-                  isSavedMoviesPage={props.isSavedMoviesPage}
-                  onMovieSave={props.onMovieSave}
-                  onMovieUnsave={props.onMovieUnsave}
-                  movie={movie}
-                />
-              ))}
-            </section>
+            location.pathname === "/movies" ? (
+              <section className="movies-card-list">
+                {movies.map((movie) => (
+                  <MoviesCard
+                    key={movie.id}
+                    name={movie.nameRU}
+                    trailer={movie.trailerLink}
+                    image={movie.image}
+                    duration={movie.duration}
+                    isSaved={props.isSaved}
+                    isSavedMoviesPage={props.isSavedMoviesPage}
+                    onMovieSave={props.onMovieSave}
+                    onMovieUnsave={props.onMovieUnsave}
+                    movie={movie}
+                  />
+                ))}
+              </section>
+            ) : (
+              <section className="movies-card-list">
+                {movies.map((movie) => (
+                  <MoviesCard
+                    key={movie._id}
+                    name={movie.nameRU}
+                    trailer={movie.trailerLink}
+                    image={movie.image}
+                    duration={movie.duration}
+                    isSavedMoviesPage={true}
+                    isLoading={false}
+                    isServerError={false}
+                    onMovieUnsave={props.onMovieUnsave}
+                    movie={movie}
+                  />
+                ))}
+              </section>
+            )
           ) : (
             <>
               {props.isServerError ? (
@@ -78,11 +99,7 @@ function MoviesCardList(props) {
                   попробуйте ещё раз.
                 </p>
               ) : (
-                <p className="not-found-movies">
-                  {props.isSavedMoviesPage
-                    ? "Нет сохраненных фильмов"
-                    : "Ничего не найдено"}
-                </p>
+                <p className="not-found-movies">Ничего не найдено</p>
               )}
             </>
           )}

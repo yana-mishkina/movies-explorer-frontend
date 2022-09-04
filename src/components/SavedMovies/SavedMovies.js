@@ -19,16 +19,14 @@ function SavedMovies(props) {
         <Navigation onBurgerOpen={props.onBurgerOpen} />
       </Header>
 
-      <SearchForm />
+      <SearchForm onMoviesSearch={props.onMoviesSearch}
+        searchedMovie={props.searchedSavedMovie} />
 
-      <FilterCheckBox />
+      <FilterCheckBox checked={props.isShortMovie} onFilter={props.onFilter} />
 
       <MoviesCardList
-        isSavedMoviesPage={true}
         movies={props.movies}
-        isLoading={false}
         isFindMovies={props.isFindMovies}
-        isServerError={false}
         onMovieUnsave={props.onMovieUnsave}
       />
 

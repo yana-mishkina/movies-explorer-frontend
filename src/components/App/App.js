@@ -31,6 +31,7 @@ function App() {
   const [isFindMovies, setIsFindMovies] = React.useState(true);
   const [isServerError, setIsServerError] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
+  const [searchedSavedMovie, setSearchedSavedMovie] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -133,19 +134,18 @@ function App() {
         setIsSuccessAction(false);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
-        console.log(err);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }
 
-  function showSearchResults(filterResults) {
+  function showSearchResults(filterResults, showMovies) {
     if (filterResults.length === 0) {
       setIsFindMovies(false);
     } else {
       setIsFindMovies(true);
-      setMovies(filterResults);
+      showMovies(filterResults);
     }
   }
 
@@ -165,7 +165,7 @@ function App() {
             isShortMovie
           );
           setIsLoading(false);
-          showSearchResults(filterShortMovies);
+          showSearchResults(filterShortMovies, setMovies);
           localStorage.setItem(
             "filtered-movies",
             JSON.stringify(filterResults)
@@ -186,7 +186,7 @@ function App() {
       );
       const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
       setIsLoading(false);
-      showSearchResults(filterShortMovies);
+      showSearchResults(filterShortMovies, setMovies);
       localStorage.setItem("filtered-movies", JSON.stringify(filterResults));
     }
   }
@@ -195,19 +195,19 @@ function App() {
     setIsShortMovie(!isShortMovie);
   }
 
-  // React.useEffect(() => {
-  //     if (isShortMovie) {
-  //       setIsShortMovie(true);
-  //       localStorage.setItem("is-short", "true");
-  //       const filterResults = SearchFilter(JSON.parse(localStorage.getItem("filtered-movies")), searchedMovie);
-  //       const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
-  //       showSearchResults(filterShortMovies);
-  //     } else {
-  //       const filterResults = JSON.parse(localStorage.getItem("filtered-movies"));
-  //       setIsFindMovies(true);
-  //       setMovies(filterResults);
-  //     }
-  // }, [isShortMovie]);
+  React.useEffect(() => {
+      if (isShortMovie) {
+        setIsShortMovie(true);
+        localStorage.setItem("is-short", "true");
+        const filterResults = SearchFilter(JSON.parse(localStorage.getItem("filtered-movies")), JSON.parse(localStorage.getItem("searched-movie")));
+        const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
+        showSearchResults(filterShortMovies, setMovies);
+      } else {
+        const filterResults = JSON.parse(localStorage.getItem("filtered-movies"));
+        setIsFindMovies(true);
+        setMovies(filterResults);
+      }
+  }, [isShortMovie]);
 
   function handleMovieSave(movie) {
     const token = localStorage.getItem("jwt");
@@ -221,16 +221,28 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function idCheck(movie) {
+    if (!movie._id) {
+      const thisMovie = savedMovies.find(
+        (savedMovie) => savedMovie.movieId === movie.id
+      );
+      return thisMovie._id;
+    } else {
+      return movie._id;
+    }
+  }
+
   function handleMovieUnsave(movie) {
     const token = localStorage.getItem("jwt");
+    const searchId = idCheck(movie);
     mainApi
-      .unsaveMovie(movie._id, token)
+      .unsaveMovie(searchId, token)
       .then(() => {
-        const filteredSavedMovies = savedMovies.filter((item) => {
-          return item._id !== movie._id
-        });
-        setSavedMovies(filteredSavedMovies);
-        localStorage.setItem("saved-movies", JSON.stringify(filteredSavedMovies));
+        // const filteredSavedMovies = savedMovies.filter((item) => {
+        //   return item._id !== movie._id
+        // });
+        // setSavedMovies(filteredSavedMovies);
+        // localStorage.setItem("saved-movies", JSON.stringify(filteredSavedMovies));
       })
       .catch((err) => console.log(err));
   }
@@ -247,6 +259,49 @@ function App() {
         .catch((err) => console.log(err));
     }
   }, [isLoggedIn]);
+
+  function handleSavedMoviesSearch(searchedMovie) {
+    localStorage.setItem("searched-saved-movie", JSON.stringify(searchedMovie));
+
+    const filterResults = SearchFilter(
+      JSON.parse(localStorage.getItem("saved-movies")),
+      searchedMovie
+    );
+    const filterShortMovies = SearchShortFilter(filterResults, isShortSavedMovie);
+    localStorage.setItem(
+      "filtered-saved-movies",
+      JSON.stringify(filterResults)
+    );
+    showSearchResults(filterShortMovies, setSavedMovies);
+
+    setSearchedSavedMovie(
+      JSON.parse(localStorage.getItem("searched-saved-movie"))
+    );
+    
+  }
+
+  const [isShortSavedMovie, setIsShortSavedMovie] = React.useState(false);
+
+  function handleShortSavedFilter() {
+    setIsShortSavedMovie(!isShortSavedMovie);
+  }
+
+  React.useEffect(() => {
+    if(isShortSavedMovie) {
+      setIsShortSavedMovie(true);
+      localStorage.setItem("is-short-saved-movie", "true");
+        const filterResults = SearchFilter(JSON.parse(localStorage.getItem("filtered-saved-movies")), JSON.parse(localStorage.getItem("searched-saved-movie")));
+        const filterShortMovies = SearchShortFilter(filterResults, isShortSavedMovie);
+        showSearchResults(filterShortMovies, setSavedMovies);
+    } else {
+      const filterResults = SearchFilter(
+        JSON.parse(localStorage.getItem("saved-movies")),
+        JSON.parse(localStorage.getItem("searched-saved-movie"))
+      );
+      setIsShortSavedMovie(false);
+      showSearchResults(filterResults, setSavedMovies);
+    }
+  }, [isShortSavedMovie])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -344,6 +399,10 @@ function App() {
                   isFindMovies={isFindMovies}
                   onMovieUnsave={handleMovieUnsave}
                   isSaved={isSaved}
+                  onMoviesSearch={handleSavedMoviesSearch}
+                  searchedSavedMovie={searchedSavedMovie}
+                  isShortMovie={isShortSavedMovie}
+                  onFilter={handleShortSavedFilter}
                 />
               </ProtectedRoute>
             }
