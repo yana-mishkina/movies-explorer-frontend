@@ -29,6 +29,7 @@ function SavedMovies(props) {
         isLoading={false}
         isFindMovies={props.isFindMovies}
         isServerError={false}
+        onMovieUnsave={props.onMovieUnsave}
       />
 
       <Footer />

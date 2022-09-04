@@ -5,7 +5,7 @@ function SaveMovieButton(props) {
   return (
     <>
       {props.isSaved ? (
-        <button className="button saved-movie-button" type="button" onClick={props.onClick}>
+        <button className="button saved-movie-button" type="reset" onClick={props.onClick}>
           <img className="saved-movie-icon" src={savedMovieIcon} alt="Иконка сохранения фильма"/>
         </button>
       ) : (

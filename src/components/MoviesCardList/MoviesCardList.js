@@ -9,12 +9,16 @@ function MoviesCardList(props) {
   const movies = props.movies.slice(0, cardsNumber);
 
   function showedCardsNumber() {
-    if (screenWidth >= 991) {
-      return 12;
-    } else if (screenWidth <= 637) {
-      return 5;
+    if (props.isSavedMoviesPage) {
+      return Infinity;
     } else {
-      return 8;
+      if (screenWidth >= 991) {
+        return 12;
+      } else if (screenWidth <= 637) {
+        return 5;
+      } else {
+        return 8;
+      }
     }
   }
 
@@ -52,15 +56,15 @@ function MoviesCardList(props) {
             <section className="movies-card-list">
               {movies.map((movie) => (
                 <MoviesCard
-                  key={movie.id}
+                  key={movie._id || movie.id}
                   name={movie.nameRU}
                   trailer={movie.trailerLink}
                   image={movie.image}
                   duration={movie.duration}
                   isSaved={props.isSaved}
                   isSavedMoviesPage={props.isSavedMoviesPage}
-                  isOnSavedMovies={false}
                   onMovieSave={props.onMovieSave}
+                  onMovieUnsave={props.onMovieUnsave}
                   movie={movie}
                 />
               ))}
@@ -74,12 +78,16 @@ function MoviesCardList(props) {
                   попробуйте ещё раз.
                 </p>
               ) : (
-                <p className="not-found-movies">{props.isSavedMoviesPage ? "Нет сохраненных фильмов" : "Ничего не найдено"}</p>
+                <p className="not-found-movies">
+                  {props.isSavedMoviesPage
+                    ? "Нет сохраненных фильмов"
+                    : "Ничего не найдено"}
+                </p>
               )}
             </>
           )}
-
-          {props.movies.length === movies.length ? undefined : (
+          {props.isSavedMoviesPage ? undefined : props.movies.length ===
+            movies.length ? undefined : (
             <ShowMoreButton onClick={showMoreCards} />
           )}
         </>

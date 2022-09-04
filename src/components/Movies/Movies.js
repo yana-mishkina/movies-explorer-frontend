@@ -32,8 +32,10 @@ function Movies(props) {
         movies={props.movies}
         isLoading={props.isLoading}
         onMovieSave={props.onMovieSave}
+        onMovieUnsave={props.onMovieUnsave}
         isFindMovies={props.isFindMovies}
         isServerError={props.isServerError}
+        isSaved={props.isSaved}
       />
 
       <Footer />

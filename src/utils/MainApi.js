@@ -15,32 +15,42 @@ class MainApi {
     return fetch(`${this._baseUrl}/movies`, {
       method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }).then((res) => this._checkResponse(res));
   }
 
-  saveMovie(card, token) {
+  saveMovie(movie, token) {
     return fetch(`${this._baseUrl}/movies`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        country: card.country || "No data",
-        director: card.director || "No data",
-        duration: card.duration || 0,
-        year: card.year || 0,
-        description: card.description || "No data",
-        image: `https://api.nomoreparties.co/${card.image.url}`,
-        trailerLink: card.trailerLink || "No data",
-        nameRU: card.nameRU,
-        nameEN: card.nameEN || "No data",
-        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
-        movieId: card.id,
+        country: movie.country || "No data",
+        director: movie.director || "No data",
+        duration: movie.duration || 0,
+        year: movie.year || 0,
+        description: movie.description || "No data",
+        image: `https://api.nomoreparties.co/${movie.image.url}`,
+        trailerLink: movie.trailerLink || "No data",
+        nameRU: movie.nameRU || "No data",
+        nameEN: movie.nameEN || "No data",
+        thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
+        movieId: movie.id,
       }),
+    }).then((res) => this._checkResponse(res));
+  }
+
+  unsaveMovie(id, token) {
+    return fetch(`${this._baseUrl}/movies/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     }).then((res) => this._checkResponse(res));
   }
 
@@ -48,8 +58,8 @@ class MainApi {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: data.name,
@@ -57,7 +67,6 @@ class MainApi {
       }),
     }).then(this._checkResponse);
   }
-  
 }
 
 export const mainApi = new MainApi({

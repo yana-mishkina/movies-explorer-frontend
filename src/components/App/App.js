@@ -30,6 +30,7 @@ function App() {
   const [searchedMovie, setSearchedMovie] = React.useState("");
   const [isFindMovies, setIsFindMovies] = React.useState(true);
   const [isServerError, setIsServerError] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -213,24 +214,39 @@ function App() {
     mainApi
       .saveMovie(movie, token)
       .then(() => {
+        setIsSaved(true);
         setSavedMovies([savedMovies, ...savedMovies]);
+        localStorage.setItem("saved-movies", JSON.stringify(movie));
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleMovieUnsave(movie) {
+    const token = localStorage.getItem("jwt");
+    mainApi
+      .unsaveMovie(movie._id, token)
+      .then(() => {
+        const filteredSavedMovies = savedMovies.filter((item) => {
+          return item._id !== movie._id
+        });
+        setSavedMovies(filteredSavedMovies);
+        localStorage.setItem("saved-movies", JSON.stringify(filteredSavedMovies));
       })
       .catch((err) => console.log(err));
   }
 
   React.useEffect(() => {
-    if(isLoggedIn) {
+    if (isLoggedIn) {
       const token = localStorage.getItem("jwt");
       mainApi
-    .getMovies(token)
-    .then((savedMovies) => {
-      console.log(savedMovies);
-      setSavedMovies(savedMovies);
-    })
-    .catch((err) => console.log(err));
+        .getMovies(token)
+        .then((savedMovies) => {
+          setSavedMovies(savedMovies);
+          localStorage.setItem("saved-movies", JSON.stringify(savedMovies));
+        })
+        .catch((err) => console.log(err));
     }
   }, [isLoggedIn]);
-
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -309,6 +325,8 @@ function App() {
                   isShortMovie={isShortMovie}
                   onFilter={handleShortFilter}
                   onMovieSave={handleMovieSave}
+                  onMovieUnsave={handleMovieUnsave}
+                  isSaved={isSaved}
                 />
               </ProtectedRoute>
             }
@@ -324,6 +342,8 @@ function App() {
                   onBurgerClose={closeAllPopups}
                   movies={savedMovies}
                   isFindMovies={isFindMovies}
+                  onMovieUnsave={handleMovieUnsave}
+                  isSaved={isSaved}
                 />
               </ProtectedRoute>
             }

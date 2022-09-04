@@ -4,7 +4,18 @@ import SaveMovieButton from "../SaveMovieButton/SaveMovieButton";
 import DeleteMovieButton from "../DeleteMovieButton/DeleteMovieButton";
 
 function MoviesCard(props) {
+
+  const [isSaved, setIsSaved] = React.useState(false);
   const location = useLocation();
+
+  React.useEffect(() => {
+    if (!props.isSavedMoviesPage) {
+      const savedMovies = JSON.parse(localStorage.getItem("saved-movies"));
+      if (savedMovies.some((movie) => movie.nameRU === props.movie.nameRU)) {
+        setIsSaved(true);
+      }
+    }
+  }, [props.movie.nameRU]);
 
   function tansformDuration(min) {
     const hours = Math.trunc(min / 60);
@@ -16,21 +27,15 @@ function MoviesCard(props) {
     }
   }
 
-  const [isSaved, setIsSaved] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   // окрашиваем кнопку лайка, если он фильм нашелся в сохраненных
-  //   if (props.savedMovies.some((movie) => movie.movieId === props.id)) {
-  //     setIsSaved(true);
-  //   }
-  // }, [props.savedMovies, props.id]);
-
   function handleSaveClick() {
+    if (!isSaved) {
       setIsSaved(true);
       props.onMovieSave(props.movie);
+    } else {
+      setIsSaved(false);
+      props.onMovieUnsave(props.movie);
+    }
   }
-
-
 
   return (
     <div className="movies-card">
@@ -38,6 +43,7 @@ function MoviesCard(props) {
         className="button movies-card__button"
         href={props.trailer}
         target="_blank"
+        rel="noopener noreferrer"
       >
         <img
           className="movies-card__photo"
@@ -52,7 +58,7 @@ function MoviesCard(props) {
       <h2 className="movies-card__name">{props.name}</h2>
       <p className="movies-card__length">{tansformDuration(props.duration)}</p>
       {props.isSavedMoviesPage ? (
-        <DeleteMovieButton />
+        <DeleteMovieButton  onClick={props.onMovieUnsave}/>
       ) : (
         <SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />
       )}
