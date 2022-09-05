@@ -9,7 +9,7 @@ function MoviesCard(props) {
   const location = useLocation();
 
   React.useEffect(() => {
-    if (!props.isSavedMoviesPage) {
+    if (location.pathname === "/movies") {
       const savedMovies = JSON.parse(localStorage.getItem("saved-movies"));
       if (savedMovies.some((movie) => movie.nameRU === props.movie.nameRU)) {
         setIsSaved(true);

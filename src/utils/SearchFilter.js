@@ -12,4 +12,11 @@ export const SearchShortFilter = (movies, isShortMovies) => {
   }
 };
 
-
+export const showSearchResults = (filterResults, setIsFindMovies, showMovies) => {
+  if (filterResults.length === 0) {
+    setIsFindMovies(false);
+  } else {
+    setIsFindMovies(true);
+    showMovies(filterResults);
+  }
+}

@@ -1,31 +1,43 @@
 import IconBurger from "../../images/icon__burger.svg";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Navigation(props) {
   return (
     <nav className="navigation">
       <ul className="navigation__links">
-        <Link
+        <NavLink
           to="/movies"
-          className="button navigation__button navigation__button_font_medium"
+          className={({ isActive }) =>
+            isActive
+              ? "button navigation__button navigation__button_font_medium navigation__button_active"
+              : "button navigation__button navigation__button_font_medium"
+          }
         >
           Фильмы
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="/saved-movies"
-          className="button navigation__button navigation__button_font_regular"
+          className={({ isActive }) =>
+            isActive
+              ? "button navigation__button navigation__button_font_medium navigation__button_active"
+              : "button navigation__button navigation__button_font_medium"
+          }
         >
           Сохраненные фильмы
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="/profile"
-          className="navigation__button navigation__button_font_medium"
+          className={({ isActive }) =>
+            isActive
+              ? "button navigation__button navigation__button_font_medium navigation__button_active"
+              : "button navigation__button navigation__button_font_medium"
+          }
         >
           <p className="navigation__text">Аккаунт</p>
           <div className="navigation__icon"></div>
-        </Link>
+        </NavLink>
       </ul>
       <button
         className="button navigation__button-burger"

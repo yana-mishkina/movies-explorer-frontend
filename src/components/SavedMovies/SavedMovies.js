@@ -28,6 +28,7 @@ function SavedMovies(props) {
         movies={props.movies}
         isFindMovies={props.isFindMovies}
         onMovieUnsave={props.onMovieUnsave}
+        isSavedMoviesPage={true}
       />
 
       <Footer />
