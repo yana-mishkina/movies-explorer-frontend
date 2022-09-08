@@ -9,7 +9,7 @@ function MoviesCard(props) {
   const location = useLocation();
 
   React.useEffect(() => {
-    if (location.pathname === "/movies") {
+    if (!props.isSavedMoviesPage) {
       const savedMovies = JSON.parse(localStorage.getItem("saved-movies"));
       if (savedMovies.some((movie) => movie.nameRU === props.movie.nameRU)) {
         setIsSaved(true);
@@ -33,8 +33,20 @@ function MoviesCard(props) {
       props.onMovieSave(props.movie);
     } else {
       setIsSaved(false);
-      props.onMovieUnsave(props.movie);
+      handleDislikeMovie();
     }
+  }
+
+  function handleDeleteMovie() {
+    setIsSaved(false);
+    props.handleDeleteMovie(props.movie._id);
+  }
+
+  function handleDislikeMovie() {
+    const savedMovies = JSON.parse(localStorage.getItem('saved-movies'));
+    const card = savedMovies.find(movie => movie.nameRU === props.movie.nameRU);
+    props.handleDeleteMovie(card._id);
+    setIsSaved(false);
   }
 
   return (
@@ -58,7 +70,7 @@ function MoviesCard(props) {
       <h2 className="movies-card__name">{props.name}</h2>
       <p className="movies-card__length">{tansformDuration(props.duration)}</p>
       {props.isSavedMoviesPage ? (
-        <DeleteMovieButton  onClick={props.onMovieUnsave}/>
+        <DeleteMovieButton  onClick={handleDeleteMovie}/>
       ) : (
         <SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />
       )}

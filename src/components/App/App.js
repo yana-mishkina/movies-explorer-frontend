@@ -223,37 +223,25 @@ function App() {
   }, [isShortMovie]);
 
   function handleMovieSave(movie) {
-    // mainApi
-    //   .saveMovie(movie, token)
-    //   .then(() => {
-    //     setIsSaved(true);
-    //     setSavedMovies([savedMovies, ...savedMovies]);
-    //     localStorage.setItem("saved-movies", JSON.stringify(movie));
-    //   })
-    //   .catch((err) => console.log(err));
-  }
-
-  function idCheck(movie) {
-    if (!movie._id) {
-      const thisMovie = savedMovies.find(
-        (savedMovie) => savedMovie.movieId === movie.id
-      );
-      return thisMovie._id;
-    } else {
-      return movie._id;
-    }
-  }
-
-  function handleMovieUnsave(movie) {
-    const searchId = idCheck(movie);
     mainApi
-      .unsaveMovie(searchId, token)
+      .saveMovie(movie, token)
+      .then((movie) => {
+        setSavedMovies([...savedMovies, movie]);
+        localStorage.setItem("saved-movies", JSON.stringify([...savedMovies, movie]));
+      })
+      .catch((err) => console.log(err));
+  }
+
+
+  function handleMovieUnsave(movieId) {
+    mainApi
+      .unsaveMovie(movieId, token)
       .then(() => {
         const filteredSavedMovies = savedMovies.filter((item) => {
-          return item._id !== movie._id;
+          return item._id !== movieId
         });
         setSavedMovies(filteredSavedMovies);
-        localStorage.setItem("saved-movies",JSON.stringify(filteredSavedMovies));
+        localStorage.setItem('saved-movies', JSON.stringify(filteredSavedMovies));
       })
       .catch((err) => console.log(err));
   }

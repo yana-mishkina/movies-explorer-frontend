@@ -67,7 +67,7 @@ function MoviesCardList(props) {
                     isSaved={props.isSaved}
                     isSavedMoviesPage={props.isSavedMoviesPage}
                     onMovieSave={props.onMovieSave}
-                    onMovieUnsave={props.onMovieUnsave}
+                    handleDeleteMovie={props.onMovieUnsave}
                     movie={movie}
                   />
                 ))}
@@ -84,7 +84,7 @@ function MoviesCardList(props) {
                     isSavedMoviesPage={true}
                     isLoading={false}
                     isServerError={false}
-                    onMovieUnsave={props.onMovieUnsave}
+                    handleDeleteMovie={props.onMovieUnsave}
                     movie={movie}
                   />
                 ))}
