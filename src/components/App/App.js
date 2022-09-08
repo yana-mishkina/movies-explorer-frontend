@@ -300,7 +300,7 @@ function App() {
       }
     } else {
       if (!keyWordForSavedMovies) {
-        showSearchResults(allSavedMovies, setIsFindSavedMovies, setSavedMovies);
+        setSavedMovies(allSavedMovies);
       } else {
         const filterResults = SearchFilter(allSavedMovies, keyWordForSavedMovies);
         setIsShortSavedMovie(false);
