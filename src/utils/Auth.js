@@ -124,5 +124,5 @@ class Auth {
 }
 
 export const auth = new Auth({
-  baseUrl: 'https://diploma.mishkinayana.nomoredomains.xyz',
+  baseUrl: 'https://api.diploma.mishkinayana.nomoredomains.sbs',
 })

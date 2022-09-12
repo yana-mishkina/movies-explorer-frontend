@@ -70,7 +70,7 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  baseUrl: "https://diploma.mishkinayana.nomoredomains.xyz",
+  baseUrl: "https://api.diploma.mishkinayana.nomoredomains.sbs",
   headers: {
     "Content-Type": "application/json",
   },
