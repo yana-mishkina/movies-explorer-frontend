@@ -29,10 +29,10 @@ function MoviesCard(props) {
 
   function handleSaveClick() {
     if (!isSaved) {
+
       setIsSaved(true);
       props.onMovieSave(props.movie);
     } else {
-      setIsSaved(false);
       handleDislikeMovie();
     }
   }

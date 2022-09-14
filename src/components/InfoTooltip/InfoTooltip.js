@@ -23,19 +23,7 @@ function InfoTooltip(props) {
           src={props.isSuccessAction ? iconOk : iconError}
           alt="Иконка статуса"
         />
-        {props.isRegistration ? (
-          <p className="popup__status">
-            {props.isSuccessAction
-              ? "Вы успешно зарегистрировались!"
-              : "Что-то пошло не так! Попробуйте ещё раз."}
-          </p>
-        ) : (
-          <p className="popup__status">
-            {props.isSuccessAction
-              ? "Ваши данные обновлены!"
-              : "Что-то пошло не так! Попробуйте ещё раз."}
-          </p>
-        )}
+        <p className="popup__status">{props.infoTooltipText}</p>
       </div>
     </section>
   );

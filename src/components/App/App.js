@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -19,13 +19,18 @@ import {
   SearchShortFilter,
   showSearchResults,
 } from "../../utils/SearchFilter";
+import {
+  TEXT_INFO_REG_SUCCESS,
+  TEXT_INFO_ERROR,
+  TEXT_INFO_UPD_SUCCESS,
+} from "../../utils/constants";
 
 function App() {
   const navigate = useNavigate();
   const [isBurgerOpen, setIsBurgerOpen] = React.useState(true);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isSuccessAction, setIsSuccessAction] = React.useState(false);
-  const [isRegistration, setIsRegistration] = React.useState(false);
+  const [infoTooltipText, setInfoTooltipText] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
@@ -37,16 +42,19 @@ function App() {
   const [isFindSavedMovies, setIsFindSavedMovies] = React.useState(true);
   const [isServerError, setIsServerError] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
-  const [searchedSavedMovie, setSearchedSavedMovie] = React.useState("");
   const [isShortSavedMovie, setIsShortSavedMovie] = React.useState(false);
   const user = JSON.parse(localStorage.getItem("user-name"));
   const token = localStorage.getItem("jwt");
   const keyWord = JSON.parse(localStorage.getItem("searched-movie"));
-  const keyWordForSavedMovies = JSON.parse(localStorage.getItem("searched-saved-movie"));
+  const keyWordForSavedMovies = JSON.parse(
+    localStorage.getItem("searched-saved-movie")
+  );
   const allMovies = JSON.parse(localStorage.getItem("movies"));
   const filtredMovies = JSON.parse(localStorage.getItem("filtered-movies"));
   const allSavedMovies = JSON.parse(localStorage.getItem("saved-movies"));
-  const filteredSavedMovies = JSON.parse(localStorage.getItem("filtered-saved-movies"));
+  const filteredSavedMovies = JSON.parse(
+    localStorage.getItem("filtered-saved-movies")
+  );
 
   function handeleBurgerOpen() {
     setIsBurgerOpen(false);
@@ -64,11 +72,11 @@ function App() {
         .then((data) => {
           setCurrentUser(data);
           setIsLoggedIn(true);
-          navigate("/movies");
+          // navigate("/movies");
         })
         .catch((err) => {
           console.log(err);
-          navigate("/signin");
+          navigate("/");
         });
     }
   }, [isLoggedIn, user]);
@@ -78,15 +86,15 @@ function App() {
     auth
       .register(data.name, data.email, data.password)
       .then(() => {
-        setIsRegistration(true);
+        setInfoTooltipText(TEXT_INFO_REG_SUCCESS);
         setIsSuccessAction(true);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
-        navigate("/signin");
       })
       .catch((err) => {
         console.log(err);
         setIsSuccessAction(false);
+        setInfoTooltipText(TEXT_INFO_ERROR);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
       })
@@ -107,6 +115,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setInfoTooltipText(TEXT_INFO_ERROR);
         setIsSuccessAction(false);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
@@ -120,13 +129,12 @@ function App() {
     localStorage.clear();
     setIsLoggedIn(false);
     setCurrentUser({});
-    setSearchedMovie([]);
-    setSearchedSavedMovie([]);
+    setSearchedMovie("");
     setIsFindMovies([]);
     setIsFindSavedMovies([]);
     setMovies([]);
     setSavedMovies([]);
-    navigate("/signin");
+    navigate("/");
   }
 
   function handleUpdateUser(data) {
@@ -136,6 +144,7 @@ function App() {
       .then((data) => {
         setCurrentUser(data);
         setIsLoading(false);
+        setInfoTooltipText(TEXT_INFO_UPD_SUCCESS);
         setIsSuccessAction(true);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
@@ -144,6 +153,7 @@ function App() {
         console.log(err);
         setIsLoading(false);
         setIsSuccessAction(false);
+        setInfoTooltipText(TEXT_INFO_ERROR);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
       })
@@ -153,10 +163,10 @@ function App() {
   }
 
   function getAllMovies(searchedMovie) {
+    localStorage.setItem("searched-movie", JSON.stringify(searchedMovie));
     moviesApi
       .getMovies()
       .then((res) => {
-        setSearchedMovie(keyWord);
         localStorage.setItem("movies", JSON.stringify(res));
         const filterResults = SearchFilter(res, searchedMovie);
         const filterShortMovies = SearchShortFilter(
@@ -178,12 +188,12 @@ function App() {
 
   function handleMoviesSearch(searchedMovie) {
     setIsLoading(true);
+    setSearchedMovie(searchedMovie);
     localStorage.setItem("searched-movie", JSON.stringify(searchedMovie));
 
     if (!localStorage.movies) {
       getAllMovies(searchedMovie);
     } else {
-      setSearchedMovie(keyWord);
       const filterResults = SearchFilter(allMovies, searchedMovie);
       const filterShortMovies = SearchShortFilter(filterResults, isShortMovie);
       setIsLoading(false);
@@ -203,6 +213,7 @@ function App() {
       if (!keyWord) {
         return undefined;
       } else {
+        setSearchedMovie(keyWord);
         const filterResults = SearchFilter(filtredMovies, keyWord);
         const filterShortMovies = SearchShortFilter(
           filterResults,
@@ -212,14 +223,15 @@ function App() {
       }
     } else {
       if (!filtredMovies) {
+        setSearchedMovie(keyWord);
         return undefined;
       } else {
+        setSearchedMovie(keyWord);
         setIsFindMovies(true);
         setMovies(filtredMovies);
         setIsShortMovie(false);
       }
     }
-    setSearchedMovie(keyWord);
   }, [isShortMovie]);
 
   function handleMovieSave(movie) {
@@ -227,21 +239,36 @@ function App() {
       .saveMovie(movie, token)
       .then((movie) => {
         setSavedMovies([...savedMovies, movie]);
-        localStorage.setItem("saved-movies", JSON.stringify([...savedMovies, movie]));
+        localStorage.setItem(
+          "saved-movies",
+          JSON.stringify([...savedMovies, movie])
+        );
+        setIsSuccessAction(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsSuccessAction(false);
+        setInfoTooltipText("Невозможно сохранить фильм. Попробуйте позже.");
+        setIsInfoTooltipOpen(true);
+        setTimeout(() => closeAllPopups(), 1000);
+      })
+      .finally(() => {
+        setIsServerError(false);
+      });
   }
-
 
   function handleMovieUnsave(movieId) {
     mainApi
       .unsaveMovie(movieId, token)
       .then(() => {
         const filteredSavedMovies = savedMovies.filter((item) => {
-          return item._id !== movieId
+          return item._id !== movieId;
         });
         setSavedMovies(filteredSavedMovies);
-        localStorage.setItem('saved-movies', JSON.stringify(filteredSavedMovies));
+        localStorage.setItem(
+          "saved-movies",
+          JSON.stringify(filteredSavedMovies)
+        );
       })
       .catch((err) => console.log(err));
   }
@@ -270,7 +297,6 @@ function App() {
       JSON.stringify(filterResults)
     );
     showSearchResults(filterShortMovies, setIsFindSavedMovies, setSavedMovies);
-    setSearchedSavedMovie(keyWordForSavedMovies);
   }
 
   function handleShortSavedFilter() {
@@ -278,15 +304,38 @@ function App() {
   }
 
   React.useEffect(() => {
+    setSavedMovies(allSavedMovies);
+    setIsShortSavedMovie(false);
+    return () => {
+      localStorage.removeItem("searched-saved-movie");
+      localStorage.removeItem("filtered-saved-movies");
+      setIsShortSavedMovie(false);
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (isShortSavedMovie) {
       setIsShortSavedMovie(true);
-      localStorage.setItem("is-short-saved-movie", "true");
+      const filterShortMovies = SearchShortFilter(
+        allSavedMovies,
+        isShortSavedMovie
+      );
+      showSearchResults(
+        filterShortMovies,
+        setIsFindSavedMovies,
+        setSavedMovies
+      );
+
       if (!keyWordForSavedMovies) {
         const filterShortMovies = SearchShortFilter(
           allSavedMovies,
           isShortSavedMovie
         );
-        showSearchResults(filterShortMovies, setIsFindSavedMovies, setSavedMovies);
+        showSearchResults(
+          filterShortMovies,
+          setIsFindSavedMovies,
+          setSavedMovies
+        );
       } else {
         const filterResults = SearchFilter(
           filteredSavedMovies,
@@ -296,18 +345,24 @@ function App() {
           filterResults,
           isShortSavedMovie
         );
-        showSearchResults(filterShortMovies, setIsFindSavedMovies, setSavedMovies);
+        showSearchResults(
+          filterShortMovies,
+          setIsFindSavedMovies,
+          setSavedMovies
+        );
       }
     } else {
       if (!keyWordForSavedMovies) {
         setSavedMovies(allSavedMovies);
       } else {
-        const filterResults = SearchFilter(allSavedMovies, keyWordForSavedMovies);
+        const filterResults = SearchFilter(
+          allSavedMovies,
+          keyWordForSavedMovies
+        );
         setIsShortSavedMovie(false);
         showSearchResults(filterResults, setIsFindSavedMovies, setSavedMovies);
       }
     }
-    setSearchedSavedMovie(keyWordForSavedMovies);
   }, [isShortSavedMovie]);
 
   return (
@@ -317,7 +372,7 @@ function App() {
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
           isSuccessAction={isSuccessAction}
-          isRegistration={isRegistration}
+          infoTooltipText={infoTooltipText}
         />
 
         <Routes>
@@ -336,82 +391,102 @@ function App() {
           <Route
             path="/signup"
             element={
-              <Register
-                onSubmit={handleRegisterSubmit}
-                isLoadingData={isLoading}
-              />
+              isLoggedIn ? (
+                <Navigate to="/movies" />
+              ) : (
+                <Register
+                  onSubmit={handleRegisterSubmit}
+                  isLoadingData={isLoading}
+                />
+              )
             }
           />
 
           <Route
             path="/signin"
             element={
-              <Login onSubmit={handleLoginSubmit} isLoadingData={isLoading} />
+              isLoggedIn ? (
+                <Navigate to="/movies" />
+              ) : (
+                <Login onSubmit={handleLoginSubmit} isLoadingData={isLoading} />
+              )
             }
           />
 
           <Route
             path="/profile"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Profile
-                  onBurgerOpen={handeleBurgerOpen}
-                  isBurgerOpen={isBurgerOpen}
-                  onBurgerClose={closeAllPopups}
-                  isLoggedIn={isLoggedIn}
-                  onUpdateUser={handleUpdateUser}
-                  isLoading={isLoading}
-                  onSignOut={handleSignOut}
-                  textButton="Редактировать"
-                  textLoading="Сохраняем..."
-                  isLoadingData={isLoading}
-                />
-              </ProtectedRoute>
+              isLoggedIn ? (
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Profile
+                    onBurgerOpen={handeleBurgerOpen}
+                    isBurgerOpen={isBurgerOpen}
+                    onBurgerClose={closeAllPopups}
+                    isLoggedIn={isLoggedIn}
+                    onUpdateUser={handleUpdateUser}
+                    isLoading={isLoading}
+                    onSignOut={handleSignOut}
+                    textButton="Редактировать"
+                    textLoading="Сохраняем..."
+                    isLoadingData={isLoading}
+                  />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 
           <Route
             path="/movies"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Movies
-                  onBurgerOpen={handeleBurgerOpen}
-                  isBurgerOpen={isBurgerOpen}
-                  onBurgerClose={closeAllPopups}
-                  movies={movies}
-                  onMoviesSearch={handleMoviesSearch}
-                  isLoading={isLoading}
-                  searchedMovie={searchedMovie}
-                  isFindMovies={isFindMovies}
-                  isServerError={isServerError}
-                  isShortMovie={isShortMovie}
-                  onFilter={handleShortFilter}
-                  onMovieSave={handleMovieSave}
-                  onMovieUnsave={handleMovieUnsave}
-                  isSaved={isSaved}
-                />
-              </ProtectedRoute>
+              isLoggedIn ? (
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Movies
+                    onBurgerOpen={handeleBurgerOpen}
+                    isBurgerOpen={isBurgerOpen}
+                    onBurgerClose={closeAllPopups}
+                    movies={movies}
+                    onMoviesSearch={handleMoviesSearch}
+                    isLoading={isLoading}
+                    searchedMovie={searchedMovie}
+                    isFindMovies={isFindMovies}
+                    isServerError={isServerError}
+                    isShortMovie={isShortMovie}
+                    onFilter={handleShortFilter}
+                    onMovieSave={handleMovieSave}
+                    onMovieUnsave={handleMovieUnsave}
+                    isSaved={isSaved}
+                    isSuccessAction={isSuccessAction}
+                  />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 
           <Route
             path="/saved-movies"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <SavedMovies
-                  onBurgerOpen={handeleBurgerOpen}
-                  isBurgerOpen={isBurgerOpen}
-                  onBurgerClose={closeAllPopups}
-                  movies={savedMovies}
-                  isFindMovies={isFindSavedMovies}
-                  onMovieUnsave={handleMovieUnsave}
-                  isSaved={isSaved}
-                  onMoviesSearch={handleSavedMoviesSearch}
-                  searchedSavedMovie={searchedSavedMovie}
-                  isShortMovie={isShortSavedMovie}
-                  onFilter={handleShortSavedFilter}
-                />
-              </ProtectedRoute>
+              isLoggedIn ? (
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <SavedMovies
+                    onBurgerOpen={handeleBurgerOpen}
+                    isBurgerOpen={isBurgerOpen}
+                    onBurgerClose={closeAllPopups}
+                    movies={savedMovies}
+                    isFindMovies={isFindSavedMovies}
+                    onMovieUnsave={handleMovieUnsave}
+                    isSaved={isSaved}
+                    onMoviesSearch={handleSavedMoviesSearch}
+                    isShortMovie={isShortSavedMovie}
+                    onFilter={handleShortSavedFilter}
+                  />
+                </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 

@@ -3,6 +3,15 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
 import ShowMoreButton from "../ShowMoreButton/ShowMoreButton";
 import { useLocation } from "react-router-dom";
+import {
+  DESKTOP_SCREEN_WIDTH,
+  TABLET_SCREEN_WIDTH,
+  CARD_NUMBER_SHOWED_DESKTOP,
+  CARD_NUMBER_SHOWED_TABLET,
+  CARD_NUMBER_SHOWED_MOBILE,
+  CARD_NUMBER_ADDED_DESKTOP,
+  CARD_NUMBER_ADDED_TABLET,
+} from "../../utils/constants";
 
 function MoviesCardList(props) {
   const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
@@ -14,21 +23,21 @@ function MoviesCardList(props) {
     if (props.isSavedMoviesPage) {
       return Infinity;
     } else {
-      if (screenWidth >= 991) {
-        return 12;
-      } else if (screenWidth <= 637) {
-        return 5;
+      if (screenWidth >= DESKTOP_SCREEN_WIDTH) {
+        return CARD_NUMBER_SHOWED_DESKTOP;
+      } else if (screenWidth <= TABLET_SCREEN_WIDTH) {
+        return CARD_NUMBER_SHOWED_MOBILE;
       } else {
-        return 8;
+        return CARD_NUMBER_SHOWED_TABLET;
       }
     }
   }
 
   function addCardsNumber() {
-    if (screenWidth >= 991) {
-      return 3;
+    if (screenWidth >= DESKTOP_SCREEN_WIDTH) {
+      return CARD_NUMBER_ADDED_DESKTOP;
     } else {
-      return 2;
+      return CARD_NUMBER_ADDED_TABLET;
     }
   }
 
@@ -38,6 +47,11 @@ function MoviesCardList(props) {
 
   React.useEffect(() => {
     window.addEventListener("resize", () => {
+      setTimeout(() => {
+        setScreenWidth(window.innerWidth);
+      }, 1000);
+    });
+    return window.removeEventListener("resize", () => {
       setTimeout(() => {
         setScreenWidth(window.innerWidth);
       }, 1000);
@@ -69,6 +83,7 @@ function MoviesCardList(props) {
                     onMovieSave={props.onMovieSave}
                     handleDeleteMovie={props.onMovieUnsave}
                     movie={movie}
+                    isSuccessAction={props.isSuccessAction}
                   />
                 ))}
               </section>

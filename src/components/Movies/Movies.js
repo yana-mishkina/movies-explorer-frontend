@@ -25,7 +25,7 @@ function Movies(props) {
         searchedMovie={props.searchedMovie}
         />
 
-      <FilterCheckBox checked={props.isShortMovie} onFilter={props.onFilter} />
+      <FilterCheckBox isChecked={props.isShortMovie} onFilter={props.onFilter} />
 
       <MoviesCardList
         isSavedMoviesPage={false}
@@ -36,6 +36,7 @@ function Movies(props) {
         isFindMovies={props.isFindMovies}
         isServerError={props.isServerError}
         isSaved={props.isSaved}
+        isSuccessAction={props.isSuccessAction}
       />
 
       <Footer />
