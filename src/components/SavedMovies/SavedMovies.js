@@ -22,7 +22,7 @@ function SavedMovies(props) {
       <SearchForm onMoviesSearch={props.onMoviesSearch}
         searchedMovie={props.searchedSavedMovie} />
 
-      <FilterCheckBox checked={props.isShortMovie} onFilter={props.onFilter} />
+      <FilterCheckBox isChecked={props.isShortMovie} onFilter={props.onFilter} />
 
       <MoviesCardList
         movies={props.movies}

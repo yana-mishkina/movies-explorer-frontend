@@ -7,13 +7,13 @@
 }
 
 .search-form__input {
-  padding: 70px 0 13px;
+  padding: 20px 0 13px;
   width: 1106px;
   font-weight: 500;
   font-size: 28px;
   line-height: 34px;
   border: none;
-  margin: 0;
+  margin: 50px 0 0;
 }
 
 .rsearch-form__input::placeholder {
@@ -66,7 +66,7 @@
   }
 
   .search-form__input {
-    padding-top: 80px;
+    margin-top: 60px;
     width: 674px;
   }
 
@@ -86,7 +86,8 @@
   }
 
   .search-form__input {
-    padding: 90px 0 15px;
+    margin-top: 70px;
+    padding: 20px 0 15px;
     max-width: calc(100% - 14px - 14px);
   }
 
