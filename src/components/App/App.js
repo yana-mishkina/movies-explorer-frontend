@@ -43,6 +43,7 @@ function App() {
   const [isServerError, setIsServerError] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
   const [isShortSavedMovie, setIsShortSavedMovie] = React.useState(false);
+  const [isSaveOk, setIsSaveOk] = React.useState(true);
   const user = JSON.parse(localStorage.getItem("user-name"));
   const token = localStorage.getItem("jwt");
   const keyWord = JSON.parse(localStorage.getItem("searched-movie"));
@@ -90,6 +91,10 @@ function App() {
         setIsSuccessAction(true);
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
+        handleLoginSubmit({
+          email: data.email,
+          password: data.password
+        },);
       })
       .catch((err) => {
         console.log(err);
@@ -247,14 +252,15 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsSaveOk(false);
         setIsSuccessAction(false);
         setInfoTooltipText("Невозможно сохранить фильм. Попробуйте позже.");
         setIsInfoTooltipOpen(true);
         setTimeout(() => closeAllPopups(), 1000);
       })
-      .finally(() => {
-        setIsServerError(false);
-      });
+      // .finally(() => {
+      //   setIsSaveOk(false);
+      // })
   }
 
   function handleMovieUnsave(movieId) {
@@ -396,7 +402,7 @@ function App() {
               ) : (
                 <Register
                   onSubmit={handleRegisterSubmit}
-                  isLoadingData={isLoading}
+                  isLoading={isLoading}
                 />
               )
             }
@@ -408,7 +414,7 @@ function App() {
               isLoggedIn ? (
                 <Navigate to="/movies" />
               ) : (
-                <Login onSubmit={handleLoginSubmit} isLoadingData={isLoading} />
+                <Login onSubmit={handleLoginSubmit} isLoading={isLoading} />
               )
             }
           />
@@ -428,7 +434,6 @@ function App() {
                     onSignOut={handleSignOut}
                     textButton="Редактировать"
                     textLoading="Сохраняем..."
-                    isLoadingData={isLoading}
                   />
                 </ProtectedRoute>
               ) : (
@@ -457,7 +462,7 @@ function App() {
                     onMovieSave={handleMovieSave}
                     onMovieUnsave={handleMovieUnsave}
                     isSaved={isSaved}
-                    isSuccessAction={isSuccessAction}
+                    isSaveOk={isSaveOk}
                   />
                 </ProtectedRoute>
               ) : (

@@ -28,7 +28,7 @@ function Register(props) {
       </Link>
       <h2 className="auth__header">Добро пожаловать!</h2>
       <form className="auth-form" onSubmit={handleSubmit}>
-      <h3 className="auth-form__input-name">Имя</h3>
+        <h3 className="auth-form__input-name">Имя</h3>
         <input
           className="auth-form__input"
           required
@@ -42,33 +42,43 @@ function Register(props) {
         <span id="auth-form__input-error" className="auth-form__input-error">
           {errors.name}
         </span>
-      <h3 className="auth-form__input-name">E-mail</h3>
-      <input
-        className="auth-form__input"
-        required
-        type="email"
-        name="email"
-        pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
-        email={values.email || ''}
-        onChange={handleChange}
-      />
-      <span id="auth-form__input-error" className="auth-form__input-error">{errors.email}</span>
-      <h3 className="auth-form__input-name">Пароль</h3>
-      <input
-        className="auth-form__input"
-        required
-        type="password"
-        name="password"
-        minLength="2"
-        maxLength="40"
-        value={values.password || ''}
-        onChange={handleChange}
-      />
-      <span id="auth-form__input-error" className="auth-form__input-error">{errors.password}</span>
-      <button type="submit" className={`button auth-form__button ${!isValid && 'auth-form__button_disabled'}`} disabled={!isValid}>
-        {props.isLoadingData ? "Регистрация..." : "Зарегистрироваться"}
-      </button>
-    </form>
+        <h3 className="auth-form__input-name">E-mail</h3>
+        <input
+          className="auth-form__input"
+          required
+          type="email"
+          name="email"
+          pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+          email={values.email || ""}
+          onChange={handleChange}
+        />
+        <span id="auth-form__input-error" className="auth-form__input-error">
+          {errors.email}
+        </span>
+        <h3 className="auth-form__input-name">Пароль</h3>
+        <input
+          className="auth-form__input"
+          required
+          type="password"
+          name="password"
+          minLength="2"
+          maxLength="40"
+          value={values.password || ""}
+          onChange={handleChange}
+        />
+        <span id="auth-form__input-error" className="auth-form__input-error">
+          {errors.password}
+        </span>
+        <button
+          type="submit"
+          className={`button auth-form__button ${
+            (!isValid || props.isLoading) && "auth-form__button_disabled"
+          }`}
+          disabled={!isValid || props.isLoading}
+        >
+          {props.isLoading ? "Регистрация..." : "Зарегистрироваться"}
+        </button>
+      </form>
       <Link to="/signin" className="button auth__button-back">
         <p className="auth__link auth__link_color_grey">
           Уже зарегистрированы?

@@ -36,7 +36,7 @@ function Movies(props) {
         isFindMovies={props.isFindMovies}
         isServerError={props.isServerError}
         isSaved={props.isSaved}
-        isSuccessAction={props.isSuccessAction}
+        isSaveOk={props.isSaveOk}
       />
 
       <Footer />

@@ -83,7 +83,7 @@ function MoviesCardList(props) {
                     onMovieSave={props.onMovieSave}
                     handleDeleteMovie={props.onMovieUnsave}
                     movie={movie}
-                    isSuccessAction={props.isSuccessAction}
+                    isSaveOk={props.isSaveOk}
                   />
                 ))}
               </section>

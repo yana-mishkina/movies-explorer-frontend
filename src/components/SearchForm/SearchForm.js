@@ -4,17 +4,15 @@ import searchIcon from "../../images/icon__search.svg";
 function SearchForm(props) {
   const [isError, setIsError] = React.useState(false);
   const [searchedMovie, setSearchedMovie] = React.useState(props.searchedMovie);
-  const [keyword, setKeyword] = React.useState();
 
   function handleSearchedMovieChange(e) {
     setSearchedMovie(e.target.value);
     setIsError(false);
-    setKeyword(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!keyword) {
+    if (!searchedMovie) {
       setIsError(true);
     } else {
       props.onMoviesSearch(searchedMovie);

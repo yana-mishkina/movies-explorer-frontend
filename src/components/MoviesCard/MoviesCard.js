@@ -29,7 +29,6 @@ function MoviesCard(props) {
 
   function handleSaveClick() {
     if (!isSaved) {
-
       setIsSaved(true);
       props.onMovieSave(props.movie);
     } else {
@@ -72,7 +71,7 @@ function MoviesCard(props) {
       {props.isSavedMoviesPage ? (
         <DeleteMovieButton  onClick={handleDeleteMovie}/>
       ) : (
-        <SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />
+        (<SaveMovieButton isSaved={isSaved} onClick={handleSaveClick} />)
       )}
     </div>
   );

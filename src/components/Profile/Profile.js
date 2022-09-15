@@ -77,9 +77,9 @@ function Profile(props) {
 
         <button
           type="submit"
-          disabled={!isValid || !isChange}
+          disabled={!isValid || !isChange || props.isLoading}
           className={`button profile__button profile__button_color_black ${
-            !isValid && "profile__button_disabled"
+            (!isValid || props.isLoading) && "profile__button_disabled"
           }`}
         >
           {props.isLoading ? props.textLoading : props.textButton}
