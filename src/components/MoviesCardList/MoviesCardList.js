@@ -78,12 +78,10 @@ function MoviesCardList(props) {
                     trailer={movie.trailerLink}
                     image={movie.image}
                     duration={movie.duration}
-                    isSaved={props.isSaved}
                     isSavedMoviesPage={props.isSavedMoviesPage}
                     onMovieSave={props.onMovieSave}
                     handleDeleteMovie={props.onMovieUnsave}
                     movie={movie}
-                    isSaveOk={props.isSaveOk}
                   />
                 ))}
               </section>
