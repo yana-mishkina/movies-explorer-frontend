@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -73,7 +73,6 @@ function App() {
         .then((data) => {
           setCurrentUser(data);
           setIsLoggedIn(true);
-          // navigate("/movies");
         })
         .catch((err) => {
           console.log(err);
@@ -309,29 +308,19 @@ function App() {
     setIsShortSavedMovie(!isShortSavedMovie);
   }
 
+  const location = useLocation();
+
   React.useEffect(() => {
-    setSavedMovies(allSavedMovies);
-    setIsShortSavedMovie(false);
-    return () => {
+    if (location.pathname === "/saved-movies") {
       localStorage.removeItem("searched-saved-movie");
-      localStorage.removeItem("filtered-saved-movies");
       setIsShortSavedMovie(false);
-    };
-  }, []);
+      showSearchResults(allSavedMovies, setIsFindSavedMovies, setSavedMovies);
+    }
+  }, [location]);
 
   React.useEffect(() => {
     if (isShortSavedMovie) {
       setIsShortSavedMovie(true);
-      const filterShortMovies = SearchShortFilter(
-        allSavedMovies,
-        isShortSavedMovie
-      );
-      showSearchResults(
-        filterShortMovies,
-        setIsFindSavedMovies,
-        setSavedMovies
-      );
-
       if (!keyWordForSavedMovies) {
         const filterShortMovies = SearchShortFilter(
           allSavedMovies,
@@ -358,14 +347,14 @@ function App() {
         );
       }
     } else {
+      setIsShortSavedMovie(false);
       if (!keyWordForSavedMovies) {
-        setSavedMovies(allSavedMovies);
+        showSearchResults(allSavedMovies, setIsFindSavedMovies, setSavedMovies);
       } else {
         const filterResults = SearchFilter(
           allSavedMovies,
           keyWordForSavedMovies
         );
-        setIsShortSavedMovie(false);
         showSearchResults(filterResults, setIsFindSavedMovies, setSavedMovies);
       }
     }
