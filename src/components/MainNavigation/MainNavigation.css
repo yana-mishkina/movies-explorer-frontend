@@ -1,0 +1,32 @@
+.navigation__button-sign-in {
+  border: none;
+  color: white;
+  background-color: black;
+  width: 76px;
+  height: 32px;
+  border-radius: 3px;
+  padding: 0;
+  margin: 0 0 0 10px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.navigation__main-links {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 520px) {
+  .navigation__main-links {
+    font-size: 10px;
+  }
+
+  .navigation__button-sign-in {
+    width: 54px;
+    height: 26px;
+    margin: 0;
+  }
+}

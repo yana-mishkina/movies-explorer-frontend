@@ -1,0 +1,21 @@
+.delete-movie-button {
+  border: none;
+  background: #F9F9F9;
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  top: 14px;
+  right: 14px;
+  background-image: url(../../images/icon__close_burger.svg);
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media screen and (max-width: 520px) {
+  .delete-movie-button {
+    top: 10px;
+    right: 10px;
+  }
+}
