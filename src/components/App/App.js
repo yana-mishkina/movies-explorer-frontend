@@ -1,5 +1,11 @@
 import React from "react";
-import { Route, Routes, useNavigate, Navigate, useLocation } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useNavigate,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -24,6 +30,7 @@ import {
   TEXT_INFO_ERROR,
   TEXT_INFO_UPD_SUCCESS,
 } from "../../utils/constants";
+import { Redirect } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
@@ -91,8 +98,8 @@ function App() {
         setTimeout(() => closeAllPopups(), 1000);
         handleLoginSubmit({
           email: data.email,
-          password: data.password
-        },);
+          password: data.password,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -207,20 +214,23 @@ function App() {
 
   function handleShortFilter() {
     setIsShortMovie(!isShortMovie);
+    localStorage.removeItem("isShort");
   }
 
   React.useEffect(() => {
     if (location.pathname === "/movies") {
       if (localStorage.isShort) {
         setIsShortMovie(true);
-      } 
+      } else {
+        setIsShortMovie(false)
+      }
     }
   }, [location]);
 
   React.useEffect(() => {
     if (isShortMovie) {
+      localStorage.setItem("isShort", true);
       setIsShortMovie(true);
-      localStorage.setItem("isShort", "true");
       if (!keyWord) {
         return undefined;
       } else {
@@ -234,7 +244,6 @@ function App() {
       }
     } else {
       setIsShortMovie(false);
-      localStorage.removeItem("isShort");
       if (!filtredMovies) {
         setSearchedMovie(keyWord);
         return undefined;
@@ -246,10 +255,11 @@ function App() {
     }
   }, [isShortMovie]);
 
-  function handleMovieSave(movie) {
+  function handleMovieSave(movie, setIsSaved) {
     mainApi
       .saveMovie(movie, token)
       .then((movie) => {
+        setIsSaved(true);
         setSavedMovies([...savedMovies, movie]);
         localStorage.setItem(
           "saved-movies",
@@ -258,6 +268,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsSaved(false);
         setIsSuccessAction(false);
         setInfoTooltipText("Невозможно сохранить фильм. Попробуйте позже.");
         setIsInfoTooltipOpen(true);
@@ -265,7 +276,7 @@ function App() {
       })
       .finally(() => {
         setIsSuccessAction(true);
-      })
+      });
   }
 
   function handleMovieUnsave(movieId) {
@@ -351,13 +362,21 @@ function App() {
       } else {
         setIsShortSavedMovie(false);
         if (!keyWordForSavedMovies) {
-          showSearchResults(allSavedMovies, setIsFindSavedMovies, setSavedMovies);
+          showSearchResults(
+            allSavedMovies,
+            setIsFindSavedMovies,
+            setSavedMovies
+          );
         } else {
           const filterResults = SearchFilter(
             allSavedMovies,
             keyWordForSavedMovies
           );
-          showSearchResults(filterResults, setIsFindSavedMovies, setSavedMovies);
+          showSearchResults(
+            filterResults,
+            setIsFindSavedMovies,
+            setSavedMovies
+          );
         }
       }
     }
@@ -414,6 +433,7 @@ function App() {
           <Route
             path="/profile"
             element={
+              isLoggedIn ? (
                 <ProtectedRoute isLoggedIn={isLoggedIn}>
                   <Profile
                     onBurgerOpen={handeleBurgerOpen}
@@ -427,49 +447,58 @@ function App() {
                     textLoading="Сохраняем..."
                   />
                 </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 
           <Route
             path="/movies"
-            element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Movies
-                    onBurgerOpen={handeleBurgerOpen}
-                    isBurgerOpen={isBurgerOpen}
-                    onBurgerClose={closeAllPopups}
-                    movies={movies}
-                    onMoviesSearch={handleMoviesSearch}
-                    isLoading={isLoading}
-                    searchedMovie={searchedMovie}
-                    isFindMovies={isFindMovies}
-                    isServerError={isServerError}
-                    isShortMovie={isShortMovie}
-                    onFilter={handleShortFilter}
-                    onMovieSave={handleMovieSave}
-                    onMovieUnsave={handleMovieUnsave}
-                    isSuccessAction={isSuccessAction}
-                  />
-                </ProtectedRoute>
+            element={isLoggedIn ? (
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Movies
+                  onBurgerOpen={handeleBurgerOpen}
+                  isBurgerOpen={isBurgerOpen}
+                  onBurgerClose={closeAllPopups}
+                  movies={movies}
+                  onMoviesSearch={handleMoviesSearch}
+                  isLoading={isLoading}
+                  searchedMovie={searchedMovie}
+                  isFindMovies={isFindMovies}
+                  isServerError={isServerError}
+                  isShortMovie={isShortMovie}
+                  onFilter={handleShortFilter}
+                  onMovieSave={handleMovieSave}
+                  onMovieUnsave={handleMovieUnsave}
+                  isSuccessAction={isSuccessAction}
+                />
+              </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 
           <Route
             path="/saved-movies"
-            element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <SavedMovies
-                    onBurgerOpen={handeleBurgerOpen}
-                    isBurgerOpen={isBurgerOpen}
-                    onBurgerClose={closeAllPopups}
-                    movies={savedMovies}
-                    isFindMovies={isFindSavedMovies}
-                    onMovieUnsave={handleMovieUnsave}
-                    onMoviesSearch={handleSavedMoviesSearch}
-                    isShortMovie={isShortSavedMovie}
-                    onFilter={handleShortSavedFilter}
-                  />
-                </ProtectedRoute>
+            element={isLoggedIn ? (
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <SavedMovies
+                  onBurgerOpen={handeleBurgerOpen}
+                  isBurgerOpen={isBurgerOpen}
+                  onBurgerClose={closeAllPopups}
+                  movies={savedMovies}
+                  isFindMovies={isFindSavedMovies}
+                  onMovieUnsave={handleMovieUnsave}
+                  onMoviesSearch={handleSavedMoviesSearch}
+                  isShortMovie={isShortSavedMovie}
+                  onFilter={handleShortSavedFilter}
+                />
+              </ProtectedRoute>
+              ) : (
+                <Navigate to="/" />
+              )
             }
           />
 

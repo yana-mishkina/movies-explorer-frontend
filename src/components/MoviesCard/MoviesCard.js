@@ -29,8 +29,8 @@ function MoviesCard(props) {
 
   function handleSaveClick() {
     if (!isSaved) {
-      props.onMovieSave(props.movie);
-      setIsSaved(true);
+      props.onMovieSave(props.movie, setIsSaved);
+      // setIsSaved(true);
     } else {
       handleDislikeMovie();
     }

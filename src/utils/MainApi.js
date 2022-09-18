@@ -35,7 +35,7 @@ class MainApi {
         year: movie.year || 0,
         description: movie.description || "No data",
         image: `https://api.nomoreparties.co/${movie.image.url}`,
-        trailerLink: movie.trailerLink || "https://www.youtube.com/",
+        trailerLink: movie.trailerLink || "https://www.youtube.com/watch?v=Cugdwa7mndA",
         nameRU: movie.nameRU || movie.nameEN,
         nameEN: movie.nameEN || movie.nameRU,
         thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
